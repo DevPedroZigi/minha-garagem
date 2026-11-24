@@ -128,5 +128,40 @@
   "media": "R$ 450",
   "foto": "fotos/card-brian.jpg",
   "criado": 1795502421266
+ },
+ {
+  "tipo": "Premium",
+  "status": "quero",
+  "criado": 1795503766061,
+  "id": "jeep-wrangler-jurassic-world",
+  "nome": "92 Jeep Wrangler Sahara (Jurassic World)",
+  "serie": "Pop Culture - Jurassic World",
+  "media": "R$ 95",
+  "obs": "OLX R$ 79–120 (3 anúncios)",
+  "foto": "fotos/jeep-jurassic-world.jpg"
+ },
+ {
+  "tipo": "Premium",
+  "status": "quero",
+  "criado": 1795503766158,
+  "id": "lincoln-continental-matrix",
+  "nome": "64 Lincoln Continental (Matrix)",
+  "ano": "2026",
+  "serie": "Pop Culture - The Matrix",
+  "media": "R$ 155",
+  "obs": "OLX R$ 110–200 (só 2 anúncios)",
+  "foto": "fotos/card-lincoln-matrix.jpg"
+ },
+ {
+  "tipo": "Car Culture",
+  "status": "quero",
+  "criado": 1795503766239,
+  "id": "supra-fleet-street-team-transport",
+  "nome": "20 Toyota GR Supra + Fleet Street",
+  "ano": "2026",
+  "serie": "Team Transport #86",
+  "obs": "Papadakis Racing · OLX R$ 149–160 (só 2 anúncios)",
+  "media": "R$ 155",
+  "foto": "fotos/card-supra-team-transport.jpg"
  }
 ]
