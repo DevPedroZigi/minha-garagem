@@ -6,9 +6,9 @@
   "tipo": "Mainline",
   "ano": "2026",
   "serie": "HW Screen Time 1/10",
-  "obs": "Nº 27/250",
+  "obs": "Nº 27/250 · OLX R$ 55–100",
   "preco": "R$ 49,90",
-  "media": "R$ 80",
+  "media": "R$ 70",
   "foto": "fotos/web-optimus.jpg",
   "criado": 1795502421256
  },
@@ -18,8 +18,8 @@
   "status": "quero",
   "tipo": "Mainline",
   "serie": "HW Screen Time 2/10",
-  "obs": "Nº 9/250 – esqueleto",
-  "media": "R$ 60",
+  "obs": "Nº 9/250 – esqueleto · OLX R$ 30–140",
+  "media": "R$ 50",
   "foto": "fotos/minecart.webp",
   "criado": 1795502421257
  },
@@ -30,8 +30,8 @@
   "tipo": "Mainline",
   "ano": "2020",
   "serie": "HW Screen Time 4/10",
-  "obs": "Nº 235/250",
-  "media": "R$ 110",
+  "obs": "Nº 235/250 · OLX R$ 120–160",
+  "media": "R$ 140",
   "foto": "fotos/web-flint.jpg",
   "criado": 1795502421258
  },
@@ -42,9 +42,9 @@
   "tipo": "Car Culture",
   "ano": "2026",
   "serie": "Team Transport #97",
-  "obs": "Pintura AO Racing Rexy (dinossauro verde)",
-  "media": "R$ 250",
-  "foto": "fotos/porsche-911-gt3r-team-transport.webp",
+  "obs": "Pintura AO Racing Rexy · OLX R$ 650–700",
+  "media": "R$ 675",
+  "foto": "fotos/card-porsche.jpg",
   "criado": 1795502421259
  },
  {
@@ -54,9 +54,10 @@
   "tipo": "Premium",
   "ano": "2026",
   "serie": "Boulevard #142",
-  "media": "R$ 90",
+  "media": "R$ 160",
   "foto": "fotos/web-bmw.jpg",
-  "criado": 1795502421260
+  "criado": 1795502421260,
+  "obs": "OLX R$ 159"
  },
  {
   "id": "skyline-r34-godzilla",
@@ -77,9 +78,10 @@
   "tipo": "Premium",
   "ano": "2026",
   "serie": "Fast & Furious 4/5 (25 anos)",
-  "media": "R$ 130",
+  "media": "R$ 90",
   "foto": "fotos/350z-fast-furious.webp",
-  "criado": 1795502421262
+  "criado": 1795502421262,
+  "obs": "OLX R$ 85–120"
  },
  {
   "id": "silvia-s15-naruto",
@@ -87,8 +89,8 @@
   "status": "quero",
   "tipo": "Outro",
   "serie": "Collectors Anime Series",
-  "obs": "Gold Spectraflame, livery itasha",
-  "media": "R$ 650",
+  "obs": "Gold Spectraflame, livery itasha · OLX R$ 450–850",
+  "media": "R$ 550",
   "foto": "fotos/web-naruto.jpg",
   "criado": 1795502421263
  },
@@ -99,9 +101,10 @@
   "tipo": "Premium",
   "ano": "2025",
   "serie": "Fast & Furious 2/5 (Tokyo Drift)",
-  "media": "R$ 110",
-  "foto": "fotos/lancer-evo-ix-fast-furious.webp",
-  "criado": 1795502421264
+  "media": "R$ 130",
+  "foto": "fotos/card-lancer.jpg",
+  "criado": 1795502421264,
+  "obs": "OLX R$ 115–160"
  },
  {
   "id": "skyline-r34-laranja-fast-furious",
@@ -109,9 +112,11 @@
   "status": "quero",
   "tipo": "Premium",
   "serie": "Fast & Furious 5/5",
-  "media": "R$ 150",
-  "foto": "fotos/skyline-r34-laranja-fast-furious.webp",
-  "criado": 1795502421265
+  "media": "R$ 250",
+  "foto": "fotos/card-laranja.jpg",
+  "criado": 1795502421265,
+  "ano": "2023",
+  "obs": "OLX/ML R$ 200–250"
  },
  {
   "id": "skyline-r34-brian-fast-furious",
@@ -119,9 +124,9 @@
   "status": "quero",
   "tipo": "Premium",
   "serie": "Fast & Furious 4/5",
-  "obs": "Prata com faixas azuis",
-  "media": "R$ 150",
-  "foto": "fotos/web-brian.jpg",
+  "obs": "Prata com faixas azuis · OLX R$ 450–550",
+  "media": "R$ 450",
+  "foto": "fotos/card-brian.jpg",
   "criado": 1795502421266
  }
 ]
