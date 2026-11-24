@@ -16,6 +16,7 @@ const COR = {
   amarelo: "#ffc906",
 };
 const VELOCIDADE = 22; // m/s "visuais"
+const GIRO_RODA = 11; // rad/s das rodas
 const reduzido = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const canvas = document.getElementById("cena3d");
 
@@ -389,7 +390,7 @@ function criarPista() {
 
 /* ---------------- cena ---------------- */
 // Modelo real (glTF). Ajuste: GIRO = rotação em Y para o bico apontar para +X.
-const MODELO = "modelos/rb19.glb?v=4";
+const MODELO = "modelos/rb19.glb?v=5";
 const GIRO = 0;
 const COMPRIMENTO = 5.4; // m (escala da cena)
 
@@ -492,7 +493,7 @@ async function carregarModelo(url) {
   for (const r of rodas) r.raio *= modelo.scale.x;
   modelo.traverse(o => {
     if (!o.isMesh) return;
-    o.castShadow = true; o.receiveShadow = true;
+    o.castShadow = false; o.receiveShadow = true; // sombra do carro = mancha de contato (bem mais leve)
     const mats = Array.isArray(o.material) ? o.material : [o.material];
     for (const m of mats) if (m && "envMapIntensity" in m) m.envMapIntensity = 1;
   });
@@ -512,7 +513,7 @@ async function carregarModelo(url) {
 
 async function iniciar() {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.shadowMap.enabled = true;
@@ -567,19 +568,26 @@ async function iniciar() {
   new IntersectionObserver(([en]) => { visivel = en.isIntersecting; }).observe(canvas);
 
   const relogio = new THREE.Clock();
-  let t = 0;
+  let t = 0, amostras = 0, soma = 0;
   const cam = new THREE.Vector3();
   camera.position.copy(base);
   function quadro() {
     requestAnimationFrame(quadro);
     if (!visivel || document.hidden) { relogio.getDelta(); return; }
     const dt = Math.min(relogio.getDelta(), 0.05);
+    // qualidade automática: se o PC/celular não segura ~50 fps, baixa a resolução da cena
+    if (amostras < 120) {
+      amostras++; if (amostras > 20) soma += dt;
+      if (amostras === 120 && soma / 100 > 1 / 50 && renderer.getPixelRatio() > 1) {
+        renderer.setPixelRatio(1); composer.setPixelRatio(1); ajustar();
+      }
+    }
     // o carro anda sempre (o Windows do Kyzam tem "efeitos de animação" desligados → reduced-motion);
     // com reduced-motion só a câmera fica parada
     {
       t += dt;
       pista.andar(VELOCIDADE * dt);
-      for (const r of carro.rodas) r.giro.rotation[r.eixo || "z"] += (r.sinal ?? -1) * Math.min((VELOCIDADE * dt) / r.raio, 0.42); // limite evita a ilusão de roda girando ao contrário
+      for (const r of carro.rodas) r.giro.rotation[r.eixo || "z"] += (r.sinal ?? -1) * GIRO_RODA * dt; // giro legível (o real é rápido demais e parece parado)
       carro.corpo.position.y = Math.sin(t * 41) * 0.003 + Math.sin(t * 2.1) * 0.005;
       carro.grupo.position.z = Math.sin(t * 0.45) * 0.18;
       carro.grupo.rotation.y = Math.cos(t * 0.45) * 0.015;
