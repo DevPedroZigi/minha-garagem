@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Minha Garagem</title>
+<title>Garagem do Kyzam</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Barlow:ital,wght@0,400;0,600;0,700;1,700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#121212; --bg2:#1a1a1a; --card:#1e1e1e; --line:#2c2c2c;
-    --txt:#f2f2f2; --mut:#9a9a9a; --orange:#FF6B00; --orange2:#ff9a3d; --red:#e3261b;
+    --txt:#f2f2f2; --mut:#9a9a9a; --orange:#E10600; --orange2:#ff3b2f; --red:#8f0000;
     --gold:#f5c542; --silver:#cfd6dd;
   }
   *{box-sizing:border-box}
@@ -17,13 +17,17 @@
   button,input,select,textarea{font:inherit;color:inherit}
 
   /* topo com chama */
-  header{position:relative;padding:28px 24px 54px;background:linear-gradient(180deg,#0c0c0c,#161616);overflow:hidden}
-  header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46px;
-    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='46' viewBox='0 0 120 46'%3E%3Cpath fill='%23e3261b' d='M0 46 C8 30 2 18 10 2 C14 20 26 22 22 46Z M28 46 C34 28 30 16 44 0 C42 22 58 26 52 46Z M58 46 C64 32 60 20 72 6 C72 24 86 28 80 46Z M86 46 C92 30 90 14 104 2 C100 22 118 28 112 46Z M112 46 C116 36 116 28 120 22 L120 46Z'/%3E%3Cpath fill='%23FF6B00' d='M4 46 C10 36 8 28 12 18 C16 30 22 34 18 46Z M34 46 C38 34 38 26 44 16 C46 30 54 34 48 46Z M64 46 C68 36 66 28 72 20 C74 32 82 36 76 46Z M92 46 C96 36 96 26 104 18 C104 32 112 36 108 46Z'/%3E%3Cpath fill='%23ffb347' d='M8 46 C11 40 12 36 13 32 C15 38 17 42 15 46Z M40 46 C42 40 43 36 45 30 C47 38 49 42 46 46Z M68 46 C70 40 71 36 72 32 C74 38 77 42 74 46Z M98 46 C100 40 102 36 104 32 C105 38 108 42 105 46Z'/%3E%3C/svg%3E") 0 0/120px 46px repeat-x;
-    opacity:.95;filter:drop-shadow(0 -4px 12px rgba(255,107,0,.45))}
+  header{position:relative;padding:28px 24px 84px;background:linear-gradient(180deg,#0c0c0c,#161616);overflow:hidden}
+  .pista{position:absolute;left:0;right:0;bottom:0;height:62px;background:linear-gradient(180deg,#2a2a2a,#1f1f1f 50%,#2a2a2a);overflow:hidden;box-shadow:0 -6px 18px rgba(0,0,0,.6)}
+  .pista::before,.pista::after{content:"";position:absolute;left:0;right:0;height:9px;background:repeating-linear-gradient(90deg,var(--orange) 0 28px,#f4f4f4 28px 56px)}
+  .pista::before{top:0}.pista::after{bottom:0}
+  .pista .faixa{position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.75) 0 26px,transparent 26px 52px)}
+  .pista .carro{position:absolute;top:19px;left:0;width:84px;height:26px;animation:corrida 7s linear infinite;filter:drop-shadow(0 3px 3px rgba(0,0,0,.7))}
+  @keyframes corrida{from{transform:translateX(-120px)}to{transform:translateX(100vw)}}
+  @media (prefers-reduced-motion:reduce){.pista .carro{animation:none;left:20%}}
   .top{max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
   h1{margin:0;font-family:"Racing Sans One",Barlow,sans-serif;font-weight:400;font-style:italic;font-size:clamp(34px,6vw,56px);
-     letter-spacing:1px;line-height:1;background:linear-gradient(90deg,var(--orange2),var(--orange) 45%,var(--red));
+     letter-spacing:1px;line-height:1;background:linear-gradient(90deg,#ffffff,#ff3b2f 40%,var(--orange) 70%);
      -webkit-background-clip:text;background-clip:text;color:transparent;transform:skewX(-6deg)}
   .sub{color:var(--mut);margin-top:6px;font-size:15px}
   .stats{display:flex;gap:10px}
@@ -35,12 +39,12 @@
   .bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
   .tabs{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:4px}
   .tab{border:0;background:none;padding:9px 18px;border-radius:9px;cursor:pointer;font-weight:700;font-style:italic;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
-  .tab.on{background:var(--orange);color:#111}
+  .tab.on{background:var(--orange);color:#fff}
   .tab .n{opacity:.7;margin-left:6px;font-style:normal}
   .search{flex:1;min-width:200px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:11px 14px;outline:none}
   .search:focus,.fld:focus{border-color:var(--orange)}
   select.search{flex:0 0 auto;min-width:170px}
-  .btn{border:0;border-radius:12px;padding:11px 18px;cursor:pointer;font-weight:700;background:var(--orange);color:#111;text-transform:uppercase;font-style:italic;letter-spacing:.5px;white-space:nowrap}
+  .btn{border:0;border-radius:12px;padding:11px 18px;cursor:pointer;font-weight:700;background:var(--orange);color:#fff;text-transform:uppercase;font-style:italic;letter-spacing:.5px;white-space:nowrap}
   .btn:hover{background:var(--orange2)}
   .btn.ghost{background:var(--bg2);color:var(--txt);border:1px solid var(--line)}
   .btn.ghost:hover{border-color:var(--orange)}
@@ -49,7 +53,7 @@
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;
         transition:transform .15s,border-color .15s,box-shadow .15s;display:flex;flex-direction:column}
-  .card:hover{transform:translateY(-3px);border-color:var(--orange);box-shadow:0 10px 30px -10px rgba(255,107,0,.45)}
+  .card:hover{transform:translateY(-3px);border-color:var(--orange);box-shadow:0 10px 30px -10px rgba(225,6,0,.45)}
   .ph{aspect-ratio:4/3;background:radial-gradient(ellipse at 50% 40%,#2e2e2e,#141414 75%);display:flex;align-items:center;justify-content:center;position:relative}
   .ph img{width:100%;height:100%;object-fit:contain;padding:10px;filter:drop-shadow(0 10px 10px rgba(0,0,0,.6))}
   .ph .none{color:#444;font-size:44px}
@@ -61,11 +65,11 @@
   .tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:6px;background:#2a2a2a;color:#ccc}
   .tag.th{background:#33363a;color:var(--silver)}
   .tag.sth{background:linear-gradient(90deg,#6b5310,#a37d12);color:#fff3c7}
-  .tag.prem{background:#3a1d0b;color:var(--orange2)}
+  .tag.prem{background:#3a0c0a;color:var(--orange2)}
   .tag.price{background:transparent;border:1px solid var(--line);color:var(--mut)}
-  .tag.avg{background:transparent;border:1px solid #5a3412;color:var(--orange2)}
+  .tag.avg{background:transparent;border:1px solid #5a1512;color:var(--orange2)}
   .got{margin-top:8px;border:1px dashed var(--orange);background:transparent;color:var(--orange);border-radius:10px;padding:7px;cursor:pointer;font-weight:700;font-style:italic;text-transform:uppercase}
-  .got:hover{background:var(--orange);color:#111}
+  .got:hover{background:var(--orange);color:#fff}
 
   .empty{text-align:center;color:var(--mut);padding:70px 20px;border:1px dashed var(--line);border-radius:16px}
   .empty b{display:block;font-family:"Racing Sans One";font-weight:400;font-size:26px;color:var(--txt);margin-bottom:6px}
@@ -76,7 +80,7 @@
   .modal{background:var(--bg2);border:1px solid var(--line);border-radius:18px;width:min(720px,100%);max-height:94vh;overflow:auto;padding:22px}
   .modal h2{margin:0 0 16px;font-family:"Racing Sans One";font-weight:400;font-style:italic;color:var(--orange);font-size:28px}
   .form{display:grid;grid-template-columns:260px 1fr;gap:18px}
-  @media (max-width:640px){.form{grid-template-columns:1fr}header{padding:22px 16px 50px}main{padding:18px 16px 50px}}
+  @media (max-width:640px){.form{grid-template-columns:1fr}header{padding:22px 16px 80px}main{padding:18px 16px 50px}}
   .drop{aspect-ratio:4/3;border:2px dashed #3a3a3a;border-radius:14px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--mut);
         cursor:pointer;background:#151515;overflow:hidden;font-size:14px;padding:10px}
   .drop.hot{border-color:var(--orange);color:var(--orange)}
@@ -88,12 +92,12 @@
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .seg{display:flex;gap:6px;margin-top:4px}
   .seg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:#121212;cursor:pointer;font-weight:700}
-  .seg button.on{background:var(--orange);color:#111;border-color:var(--orange)}
+  .seg button.on{background:var(--orange);color:#fff;border-color:var(--orange)}
   .acts{display:flex;gap:10px;justify-content:space-between;margin-top:18px;flex-wrap:wrap}
   .acts div{display:flex;gap:10px}
   .hint{font-size:12px;color:var(--mut)}
   .foot{display:flex;gap:10px;justify-content:center;margin-top:40px;flex-wrap:wrap}
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--orange);color:#111;font-weight:700;padding:10px 18px;border-radius:10px;transition:transform .25s;z-index:20}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--orange);color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;transition:transform .25s;z-index:20}
   .toast.on{transform:translateX(-50%) translateY(0)}
   body:not(.dono) .own{display:none!important}
   body:not(.dono) .card{cursor:default}
@@ -108,7 +112,7 @@
 <header>
   <div class="top">
     <div>
-      <h1>Minha Garagem</h1>
+      <h1>Garagem do Kyzam</h1>
       <div class="sub">Coleção de miniaturas 1:64</div>
     </div>
     <div class="stats">
@@ -117,6 +121,15 @@
       <button class="lock" id="lock" title="Entrar no modo edição">🔒</button>
     </div>
   </div>
+  <div class="pista"><div class="faixa"></div>
+    <svg class="carro" viewBox="0 0 84 26" aria-hidden="true">
+      <rect x="2" y="3" width="10" height="10" rx="1" fill="#1a1a1a"/><rect x="1" y="2" width="12" height="3" fill="#E10600"/>
+      <path d="M8 16 L14 10 L36 9 L44 4 L52 4 L56 10 L74 12 L83 16 L83 18 L8 19 Z" fill="#E10600"/>
+      <path d="M44 4 L52 4 L54 9 L42 9 Z" fill="#111"/><circle cx="48" cy="6.5" r="2.2" fill="#f5c542"/>
+      <rect x="70" y="17" width="14" height="3" fill="#1a1a1a"/><path d="M20 12 L34 11 L34 15 L20 15 Z" fill="#fff" opacity=".85"/>
+      <circle cx="18" cy="18" r="7" fill="#111"/><circle cx="18" cy="18" r="2.5" fill="#666"/>
+      <circle cx="66" cy="18.5" r="6.5" fill="#111"/><circle cx="66" cy="18.5" r="2.3" fill="#666"/>
+    </svg></div>
 </header>
 
 <main>
