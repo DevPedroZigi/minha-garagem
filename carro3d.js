@@ -389,7 +389,7 @@ function criarPista() {
 
 /* ---------------- cena ---------------- */
 // Modelo real (glTF). Ajuste: GIRO = rotação em Y para o bico apontar para +X.
-const MODELO = "modelos/rb19.glb";
+const MODELO = "modelos/rb19.glb?v=4";
 const GIRO = 0;
 const COMPRIMENTO = 5.4; // m (escala da cena)
 
@@ -574,7 +574,9 @@ async function iniciar() {
     requestAnimationFrame(quadro);
     if (!visivel || document.hidden) { relogio.getDelta(); return; }
     const dt = Math.min(relogio.getDelta(), 0.05);
-    if (!reduzido) {
+    // o carro anda sempre (o Windows do Kyzam tem "efeitos de animação" desligados → reduced-motion);
+    // com reduced-motion só a câmera fica parada
+    {
       t += dt;
       pista.andar(VELOCIDADE * dt);
       for (const r of carro.rodas) r.giro.rotation[r.eixo || "z"] += (r.sinal ?? -1) * Math.min((VELOCIDADE * dt) / r.raio, 0.42); // limite evita a ilusão de roda girando ao contrário
@@ -582,7 +584,8 @@ async function iniciar() {
       carro.grupo.position.z = Math.sin(t * 0.45) * 0.18;
       carro.grupo.rotation.y = Math.cos(t * 0.45) * 0.015;
     }
-    cam.set(base.x + mouse.x * 0.7 + Math.sin(t * 0.3) * 0.15, base.y - mouse.y * 0.25, base.z + Math.cos(t * 0.23) * 0.12);
+    const bal = reduzido ? 0 : 1;
+    cam.set(base.x + (mouse.x * 0.7 + Math.sin(t * 0.3) * 0.15) * bal, base.y - mouse.y * 0.25 * bal, base.z + Math.cos(t * 0.23) * 0.12 * bal);
     camera.position.lerp(cam, 0.08);
     camera.lookAt(alvo);
     composer.render();
