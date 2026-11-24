@@ -388,6 +388,56 @@ function criarPista() {
 }
 
 /* ---------------- cena ---------------- */
+// Modelo real (glTF). Ajuste: GIRO = rotação em Y para o bico apontar para +X.
+const MODELO = "modelos/rb19.glb";
+const GIRO = 0;
+const COMPRIMENTO = 5.4; // m (escala da cena)
+
+async function carregarModelo(url) {
+  const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
+  const { MeshoptDecoder } = await import("three/addons/libs/meshopt_decoder.module.js");
+  const { DRACOLoader } = await import("three/addons/loaders/DRACOLoader.js");
+  const loader = new GLTFLoader();
+  loader.setMeshoptDecoder(MeshoptDecoder);
+  const draco = new DRACOLoader(); draco.setDecoderPath("https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/");
+  loader.setDRACOLoader(draco);
+  const gltf = await loader.loadAsync(url);
+  const modelo = gltf.scene;
+  modelo.rotation.y = GIRO;
+  modelo.updateMatrixWorld(true);
+
+  // normaliza: comprimento fixo, centrado em X/Z, rodas no chão
+  let caixa = new THREE.Box3().setFromObject(modelo);
+  const tam = caixa.getSize(new THREE.Vector3());
+  const longo = Math.max(tam.x, tam.z);
+  if (tam.z > tam.x) { modelo.rotation.y += Math.PI / 2; modelo.updateMatrixWorld(true); caixa = new THREE.Box3().setFromObject(modelo); }
+  modelo.scale.setScalar(COMPRIMENTO / longo);
+  modelo.updateMatrixWorld(true);
+  caixa = new THREE.Box3().setFromObject(modelo);
+  const centro = caixa.getCenter(new THREE.Vector3());
+  modelo.position.x -= centro.x; modelo.position.z -= centro.z; modelo.position.y -= caixa.min.y;
+
+  const rodas = [];
+  modelo.traverse(o => {
+    if (!o.isMesh) return;
+    o.castShadow = true; o.receiveShadow = true;
+    const mats = Array.isArray(o.material) ? o.material : [o.material];
+    for (const m of mats) if (m && "envMapIntensity" in m) m.envMapIntensity = 1;
+  });
+
+  const corpo = new THREE.Group(); corpo.add(modelo);
+  const grupo = new THREE.Group(); grupo.add(corpo);
+  // sombra de contato
+  const sombra = new THREE.Mesh(new THREE.PlaneGeometry(COMPRIMENTO * 1.05, 2.3),
+    new THREE.MeshBasicMaterial({ map: texturaCanvas(256, 128, (g, w, h) => {
+      const gr = g.createRadialGradient(w / 2, h / 2, 4, w / 2, h / 2, w / 2);
+      gr.addColorStop(0, "rgba(0,0,0,.75)"); gr.addColorStop(1, "rgba(0,0,0,0)");
+      g.fillStyle = gr; g.save(); g.scale(1, h / w * 2); g.fillRect(0, 0, w, w); g.restore();
+    }), transparent: true, depthWrite: false }));
+  sombra.rotation.x = -Math.PI / 2; sombra.position.y = 0.004; grupo.add(sombra);
+  return { grupo, corpo, rodas };
+}
+
 async function iniciar() {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -418,11 +468,12 @@ async function iniciar() {
   const frente = new THREE.PointLight(0xffffff, 6, 8, 2); frente.position.set(4, 1.2, 2.5); cena.add(frente);
 
   const pista = criarPista(); cena.add(pista.grupo);
-  const carro = criarCarro(); cena.add(carro.grupo);
+  const carro = (await carregarModelo(MODELO).catch(e => { console.warn("modelo 3D indisponível:", e); return null; })) || criarCarro();
+  cena.add(carro.grupo);
 
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(cena, camera));
-  composer.addPass(new UnrealBloomPass(new THREE.Vector2(256, 256), 0.55, 0.5, 0.9));
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(256, 256), 0.35, 0.4, 0.97));
   composer.addPass(new OutputPass());
 
   const alvo = new THREE.Vector3(), base = new THREE.Vector3();
@@ -430,8 +481,8 @@ async function iniciar() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     renderer.setSize(w, h, false); composer.setSize(w, h);
     camera.aspect = w / h;
-    if (camera.aspect > 1.6) { base.set(3.7, 1.45, 5.3); alvo.set(-1.45 * Math.min(camera.aspect / 3, 1.25), 0.3, 0.1); camera.fov = 30; }
-    else { base.set(6.2, 1.7, 8.6); alvo.set(0.15, 0.85, 0); camera.fov = 31; }
+    if (camera.aspect > 1.6) { base.set(3.7, 1.45, 5.3); alvo.set(-1.45 * Math.min(camera.aspect / 3, 1.25), 0.62, 0.1); camera.fov = 30; }
+    else { base.set(5.9, 1.6, 8.2); alvo.set(0.15, 0.7, 0); camera.fov = 31; }
     cena.fog.near = base.length() + 1.5; cena.fog.far = cena.fog.near + 22; // névoa começa depois do carro
     camera.updateProjectionMatrix();
   }

@@ -352,5 +352,6 @@ carregar().then(()=>{ // abre na aba que tem carrinhos
   if(!cars.some(c=>c.status==="tenho")){tab="quero";document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.tab==="quero"))}
   render()}).catch(e=>{$("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>Não consegui carregar a lista</b>${esc(e.message)}</div>`});
 </script>
+<p style="text-align:center;font-size:11px;color:var(--mut);opacity:.7;padding:28px 16px 36px">Modelo 3D: <a href="https://sketchfab.com/3d-models/oracle-red-bull-f1-car-rb19-2023-e4afe46f3aab4b23a418da06fc163821" target="_blank" rel="noopener" style="color:inherit">Oracle Red Bull F1 Car RB19 2023</a> por Redgrund · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:inherit">CC BY 4.0</a></p>
 </body>
 </html>
