@@ -393,6 +393,77 @@ const MODELO = "modelos/rb19.glb";
 const GIRO = 0;
 const COMPRIMENTO = 5.4; // m (escala da cena)
 
+// O RB19 vem numa malha só: recorta os triângulos de cada roda (pelo eixo) e
+// cria um pivô para girar. Medidas no espaço do modelo (Y para cima, bico em +Z, eixo em X).
+const RODAS_RB19 = [
+  { z: 1.378, y: 0.251, r: 0.252, xIn: 0.45 }, // dianteiras
+  { z: -1.014, y: 0.254, r: 0.256, xIn: 0.40 }, // traseiras
+];
+
+function separarRodas(raiz) {
+  const malhas = [];
+  raiz.traverse(o => { if (o.isMesh) malhas.push(o); });
+  const rodas = [];
+  const pivos = [];
+  for (const d of RODAS_RB19) for (const lado of [1, -1]) {
+    const pivo = new THREE.Group();
+    pivo.position.set(0, d.y, d.z);
+    raiz.add(pivo);
+    pivos.push({ ...d, lado, pivo });
+    rodas.push({ giro: pivo, raio: d.r, eixo: "x", sinal: 1 });
+  }
+  raiz.updateMatrixWorld(true);
+  const v = new THREE.Vector3();
+  for (const o of malhas) {
+    const g = o.geometry, pos = g.attributes.position, idx = g.index;
+    if (!idx) continue;
+    const n = pos.count, mundo = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { v.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld); mundo[i * 3] = v.x; mundo[i * 3 + 1] = v.y; mundo[i * 3 + 2] = v.z; }
+    const qual = new Int8Array(n).fill(-1); // em qual roda o vértice está
+    for (let i = 0; i < n; i++) {
+      const x = mundo[i * 3], y = mundo[i * 3 + 1], z = mundo[i * 3 + 2];
+      pivos.forEach((p, k) => { if (x * p.lado > p.xIn && Math.hypot(y - p.y, z - p.z) < p.r + 0.012) qual[i] = k; });
+    }
+    const resto = [], porRoda = pivos.map(() => []);
+    const a = idx.array;
+    for (let t = 0; t < a.length; t += 3) {
+      const k = qual[a[t]];
+      if (k >= 0 && qual[a[t + 1]] === k && qual[a[t + 2]] === k) porRoda[k].push(a[t], a[t + 1], a[t + 2]);
+      else resto.push(a[t], a[t + 1], a[t + 2]);
+    }
+    if (porRoda.every(l => !l.length)) continue;
+    porRoda.forEach((lista, k) => {
+      if (!lista.length) return;
+      const gr = compactar(g, lista);
+      const m = new THREE.Mesh(gr, o.material);
+      // malha fica onde estava: matriz = inverso(pivô) * mundo(original)
+      m.matrixAutoUpdate = false;
+      m.matrix.copy(pivos[k].pivo.matrixWorld).invert().multiply(o.matrixWorld);
+      pivos[k].pivo.add(m);
+    });
+    g.setIndex(resto);
+  }
+  return rodas;
+}
+
+function compactar(g, lista) {
+  const mapa = new Map(), novos = [];
+  const ind = lista.map(i => { let j = mapa.get(i); if (j === undefined) { j = novos.length; mapa.set(i, j); novos.push(i); } return j; });
+  const out = new THREE.BufferGeometry();
+  for (const [nome, at] of Object.entries(g.attributes)) {
+    const s = at.itemSize, src = at.array, dst = new src.constructor(novos.length * s);
+    if (at.isInterleavedBufferAttribute) { // valores crus (quantizados), sem desnormalizar
+      const passo = at.data.stride, off = at.offset;
+      for (let j = 0; j < novos.length; j++) for (let c = 0; c < s; c++) dst[j * s + c] = src[novos[j] * passo + off + c];
+    } else {
+      for (let j = 0; j < novos.length; j++) for (let c = 0; c < s; c++) dst[j * s + c] = src[novos[j] * s + c];
+    }
+    out.setAttribute(nome, new THREE.BufferAttribute(dst, s, at.normalized));
+  }
+  out.setIndex(ind);
+  return out;
+}
+
 async function carregarModelo(url) {
   const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
   const { MeshoptDecoder } = await import("three/addons/libs/meshopt_decoder.module.js");
@@ -403,6 +474,8 @@ async function carregarModelo(url) {
   loader.setDRACOLoader(draco);
   const gltf = await loader.loadAsync(url);
   const modelo = gltf.scene;
+  modelo.updateMatrixWorld(true);
+  const rodas = separarRodas(modelo);
   modelo.rotation.y = GIRO;
   modelo.updateMatrixWorld(true);
 
@@ -416,8 +489,7 @@ async function carregarModelo(url) {
   caixa = new THREE.Box3().setFromObject(modelo);
   const centro = caixa.getCenter(new THREE.Vector3());
   modelo.position.x -= centro.x; modelo.position.z -= centro.z; modelo.position.y -= caixa.min.y;
-
-  const rodas = [];
+  for (const r of rodas) r.raio *= modelo.scale.x;
   modelo.traverse(o => {
     if (!o.isMesh) return;
     o.castShadow = true; o.receiveShadow = true;
@@ -505,7 +577,7 @@ async function iniciar() {
     if (!reduzido) {
       t += dt;
       pista.andar(VELOCIDADE * dt);
-      for (const r of carro.rodas) r.giro.rotation.z -= (VELOCIDADE * dt) / r.raio;
+      for (const r of carro.rodas) r.giro.rotation[r.eixo || "z"] += (r.sinal ?? -1) * Math.min((VELOCIDADE * dt) / r.raio, 0.42); // limite evita a ilusão de roda girando ao contrário
       carro.corpo.position.y = Math.sin(t * 41) * 0.003 + Math.sin(t * 2.1) * 0.005;
       carro.grupo.position.z = Math.sin(t * 0.45) * 0.18;
       carro.grupo.rotation.y = Math.cos(t * 0.45) * 0.015;
