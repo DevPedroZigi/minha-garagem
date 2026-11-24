@@ -65,9 +65,10 @@
   "tipo": "Premium",
   "ano": "2025",
   "serie": "Pop Culture - Godzilla",
-  "media": "R$ 180",
+  "media": "R$ 1.000",
   "foto": "fotos/web-godzilla.jpg",
-  "criado": 1795502421261
+  "criado": 1795502421261,
+  "obs": "Esgotado nas lojas (lançou ~R$ 300); revenda R$ 970–1.075"
  },
  {
   "id": "350z-fast-furious",
