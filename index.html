@@ -348,7 +348,9 @@ function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");cl
 /* ---------- init ---------- */
 for(const t of TIPOS){$("fTipo").add(new Option(t,t));$("fTipoM").add(new Option(t,t))}
 aplicarModo();
-carregar().then(render).catch(e=>{$("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>Não consegui carregar a lista</b>${esc(e.message)}</div>`});
+carregar().then(()=>{ // abre na aba que tem carrinhos
+  if(!cars.some(c=>c.status==="tenho")){tab="quero";document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.tab==="quero"))}
+  render()}).catch(e=>{$("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>Não consegui carregar a lista</b>${esc(e.message)}</div>`});
 </script>
 </body>
 </html>
