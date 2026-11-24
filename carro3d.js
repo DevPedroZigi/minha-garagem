@@ -518,6 +518,11 @@ async function iniciar() {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  // Sem aceleração de vídeo (WebGL no processador: SwiftShader/"Basic Render") → modo leve
+  const gl = renderer.getContext(), info = gl.getExtension("WEBGL_debug_renderer_info");
+  const placa = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : "";
+  let leve = /swiftshader|basic render|llvmpipe|software/i.test(placa);
+  if (leve) { console.info("3D em modo leve (sem aceleração de vídeo):", placa); renderer.setPixelRatio(0.6); renderer.shadowMap.enabled = false; }
 
   const cena = new THREE.Scene();
   cena.background = new THREE.Color(COR.fundo);
@@ -578,8 +583,10 @@ async function iniciar() {
     // qualidade automática: se o PC/celular não segura ~50 fps, baixa a resolução da cena
     if (amostras < 120) {
       amostras++; if (amostras > 20) soma += dt;
-      if (amostras === 120 && soma / 100 > 1 / 50 && renderer.getPixelRatio() > 1) {
-        renderer.setPixelRatio(1); composer.setPixelRatio(1); ajustar();
+      if (amostras === 120 && soma / 100 > 1 / 50) {
+        if (renderer.getPixelRatio() > 1) { renderer.setPixelRatio(1); composer.setPixelRatio(1); }
+        else if (!leve) { leve = true; renderer.setPixelRatio(0.75); renderer.shadowMap.enabled = false; }
+        ajustar(); amostras = soma = 0; // mede de novo
       }
     }
     // o carro anda sempre (o Windows do Kyzam tem "efeitos de animação" desligados → reduced-motion);
@@ -596,7 +603,7 @@ async function iniciar() {
     cam.set(base.x + (mouse.x * 0.7 + Math.sin(t * 0.3) * 0.15) * bal, base.y - mouse.y * 0.25 * bal, base.z + Math.cos(t * 0.23) * 0.12 * bal);
     camera.position.lerp(cam, 0.08);
     camera.lookAt(alvo);
-    composer.render();
+    if (leve) renderer.render(cena, camera); else composer.render(); // modo leve: sem brilho (bloom)
   }
   quadro();
   canvas.classList.add("pronto");
