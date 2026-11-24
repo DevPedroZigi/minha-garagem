@@ -127,6 +127,11 @@
     </div>
     <input class="search" id="q" placeholder="Buscar por nome, série ou ano...">
     <select class="search" id="fTipo"><option value="">Todos os tipos</option></select>
+    <select class="search" id="fOrdem">
+      <option value="nome">Ordem: nome (A–Z)</option>
+      <option value="barato">Mais barato primeiro</option>
+      <option value="caro">Mais caro primeiro</option>
+    </select>
     <button class="btn own" id="add">+ Adicionar</button>
   </div>
   <div class="grid" id="grid"></div>
@@ -178,6 +183,9 @@ const TIPOS=["Mainline","Premium","Treasure Hunt","Super Treasure Hunt","Car Cul
 const $=id=>document.getElementById(id);
 let cars=[], sha=null, tab="tenho", editing=null, foto="", status="tenho";
 let token=null; try{token=localStorage.getItem("garagemToken")}catch{}
+// "R$ 1.075,50" -> 1075.5 ; usa o preço médio, ou o preço anotado se não tiver média
+function valor(c){const s=String(c.media||c.preco||"").replace(/[^\d,.]/g,"").replace(/\./g,"").replace(",",".");
+  const n=parseFloat(s);return isNaN(n)?null:n}
 
 /* ---------- GitHub ---------- */
 const gh=(path,opt={})=>fetch(API+path+(opt.method?"":`?ref=${BRANCH}&t=${Date.now()}`),{...opt,
@@ -234,7 +242,11 @@ function render(){
   $("sQuero").textContent=$("nQuero").textContent=quero;
   const list=cars.filter(c=>c.status===tab && (!ft||c.tipo===ft) &&
       (!q||[c.nome,c.serie,c.ano,c.obs].join(" ").toLowerCase().includes(q)))
-    .sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"));
+    .sort((a,b)=>{
+      const ord=$("fOrdem").value;
+      if(ord!=="nome"){const pa=valor(a),pb=valor(b);
+        if(pa!==pb){if(pa===null)return 1;if(pb===null)return -1;return ord==="barato"?pa-pb:pb-pa}}
+      return a.nome.localeCompare(b.nome,"pt-BR")});
   if(!list.length){
     $("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>${q||ft?"Nada encontrado":tab==="tenho"?"Garagem vazia":"Nenhum na mira"}</b>${q||ft?"Tente outra busca.":""}</div>`;return;
   }
@@ -314,6 +326,8 @@ $("grid").onclick=async e=>{
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));render()});
 $("q").oninput=render;$("fTipo").onchange=render;
+try{const o=localStorage.getItem("garagemOrdem");if(o)$("fOrdem").value=o}catch{}
+$("fOrdem").onchange=()=>{try{localStorage.setItem("garagemOrdem",$("fOrdem").value)}catch{}render()};
 $("add").onclick=()=>openModal();
 $("exp").onclick=()=>{const a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([JSON.stringify(cars,null,1)],{type:"application/json"}));
