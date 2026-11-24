@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minha Garagem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Barlow:ital,wght@0,400;0,600;0,700;1,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#121212; --bg2:#1a1a1a; --card:#1e1e1e; --line:#2c2c2c;
+    --txt:#f2f2f2; --mut:#9a9a9a; --orange:#FF6B00; --orange2:#ff9a3d; --red:#e3261b;
+    --gold:#f5c542; --silver:#cfd6dd;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--txt);font-family:Barlow,system-ui,sans-serif}
+  button,input,select,textarea{font:inherit;color:inherit}
+
+  /* topo com chama */
+  header{position:relative;padding:28px 24px 54px;background:linear-gradient(180deg,#0c0c0c,#161616);overflow:hidden}
+  header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46px;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='46' viewBox='0 0 120 46'%3E%3Cpath fill='%23e3261b' d='M0 46 C8 30 2 18 10 2 C14 20 26 22 22 46Z M28 46 C34 28 30 16 44 0 C42 22 58 26 52 46Z M58 46 C64 32 60 20 72 6 C72 24 86 28 80 46Z M86 46 C92 30 90 14 104 2 C100 22 118 28 112 46Z M112 46 C116 36 116 28 120 22 L120 46Z'/%3E%3Cpath fill='%23FF6B00' d='M4 46 C10 36 8 28 12 18 C16 30 22 34 18 46Z M34 46 C38 34 38 26 44 16 C46 30 54 34 48 46Z M64 46 C68 36 66 28 72 20 C74 32 82 36 76 46Z M92 46 C96 36 96 26 104 18 C104 32 112 36 108 46Z'/%3E%3Cpath fill='%23ffb347' d='M8 46 C11 40 12 36 13 32 C15 38 17 42 15 46Z M40 46 C42 40 43 36 45 30 C47 38 49 42 46 46Z M68 46 C70 40 71 36 72 32 C74 38 77 42 74 46Z M98 46 C100 40 102 36 104 32 C105 38 108 42 105 46Z'/%3E%3C/svg%3E") 0 0/120px 46px repeat-x;
+    opacity:.95;filter:drop-shadow(0 -4px 12px rgba(255,107,0,.45))}
+  .top{max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  h1{margin:0;font-family:"Racing Sans One",Barlow,sans-serif;font-weight:400;font-style:italic;font-size:clamp(34px,6vw,56px);
+     letter-spacing:1px;line-height:1;background:linear-gradient(90deg,var(--orange2),var(--orange) 45%,var(--red));
+     -webkit-background-clip:text;background-clip:text;color:transparent;transform:skewX(-6deg)}
+  .sub{color:var(--mut);margin-top:6px;font-size:15px}
+  .stats{display:flex;gap:10px}
+  .stat{background:#1b1b1b;border:1px solid var(--line);border-radius:12px;padding:10px 16px;text-align:center;min-width:92px}
+  .stat b{display:block;font-family:"Racing Sans One";font-weight:400;font-size:28px;color:var(--orange)}
+  .stat span{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+
+  main{max-width:1240px;margin:0 auto;padding:22px 24px 60px}
+  .bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
+  .tabs{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:4px}
+  .tab{border:0;background:none;padding:9px 18px;border-radius:9px;cursor:pointer;font-weight:700;font-style:italic;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
+  .tab.on{background:var(--orange);color:#111}
+  .tab .n{opacity:.7;margin-left:6px;font-style:normal}
+  .search{flex:1;min-width:200px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:11px 14px;outline:none}
+  .search:focus,.fld:focus{border-color:var(--orange)}
+  select.search{flex:0 0 auto;min-width:170px}
+  .btn{border:0;border-radius:12px;padding:11px 18px;cursor:pointer;font-weight:700;background:var(--orange);color:#111;text-transform:uppercase;font-style:italic;letter-spacing:.5px;white-space:nowrap}
+  .btn:hover{background:var(--orange2)}
+  .btn.ghost{background:var(--bg2);color:var(--txt);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--orange)}
+  .btn.danger{background:transparent;color:#ff6b6b;border:1px solid #4a2222}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;
+        transition:transform .15s,border-color .15s,box-shadow .15s;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-3px);border-color:var(--orange);box-shadow:0 10px 30px -10px rgba(255,107,0,.45)}
+  .ph{aspect-ratio:4/3;background:radial-gradient(ellipse at 50% 40%,#2e2e2e,#141414 75%);display:flex;align-items:center;justify-content:center;position:relative}
+  .ph img{width:100%;height:100%;object-fit:contain;padding:10px;filter:drop-shadow(0 10px 10px rgba(0,0,0,.6))}
+  .ph .none{color:#444;font-size:44px}
+  .ph::after{content:"";position:absolute;left:12%;right:12%;bottom:8px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,var(--orange),transparent);opacity:.55}
+  .info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .name{font-weight:700;font-size:17px;line-height:1.2}
+  .meta{color:var(--mut);font-size:13px}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+  .tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:6px;background:#2a2a2a;color:#ccc}
+  .tag.th{background:#33363a;color:var(--silver)}
+  .tag.sth{background:linear-gradient(90deg,#6b5310,#a37d12);color:#fff3c7}
+  .tag.prem{background:#3a1d0b;color:var(--orange2)}
+  .tag.price{background:transparent;border:1px solid var(--line);color:var(--mut)}
+  .tag.avg{background:transparent;border:1px solid #5a3412;color:var(--orange2)}
+  .got{margin-top:8px;border:1px dashed var(--orange);background:transparent;color:var(--orange);border-radius:10px;padding:7px;cursor:pointer;font-weight:700;font-style:italic;text-transform:uppercase}
+  .got:hover{background:var(--orange);color:#111}
+
+  .empty{text-align:center;color:var(--mut);padding:70px 20px;border:1px dashed var(--line);border-radius:16px}
+  .empty b{display:block;font-family:"Racing Sans One";font-weight:400;font-size:26px;color:var(--txt);margin-bottom:6px}
+
+  /* modal */
+  .ov{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+  .ov.on{display:flex}
+  .modal{background:var(--bg2);border:1px solid var(--line);border-radius:18px;width:min(720px,100%);max-height:94vh;overflow:auto;padding:22px}
+  .modal h2{margin:0 0 16px;font-family:"Racing Sans One";font-weight:400;font-style:italic;color:var(--orange);font-size:28px}
+  .form{display:grid;grid-template-columns:260px 1fr;gap:18px}
+  @media (max-width:640px){.form{grid-template-columns:1fr}header{padding:22px 16px 50px}main{padding:18px 16px 50px}}
+  .drop{aspect-ratio:4/3;border:2px dashed #3a3a3a;border-radius:14px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--mut);
+        cursor:pointer;background:#151515;overflow:hidden;font-size:14px;padding:10px}
+  .drop.hot{border-color:var(--orange);color:var(--orange)}
+  .drop img{width:100%;height:100%;object-fit:contain}
+  .col{display:flex;flex-direction:column;gap:10px}
+  label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--mut);font-weight:700}
+  .fld{width:100%;background:#121212;border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none;margin-top:4px}
+  textarea.fld{resize:vertical;min-height:64px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .seg{display:flex;gap:6px;margin-top:4px}
+  .seg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:#121212;cursor:pointer;font-weight:700}
+  .seg button.on{background:var(--orange);color:#111;border-color:var(--orange)}
+  .acts{display:flex;gap:10px;justify-content:space-between;margin-top:18px;flex-wrap:wrap}
+  .acts div{display:flex;gap:10px}
+  .hint{font-size:12px;color:var(--mut)}
+  .foot{display:flex;gap:10px;justify-content:center;margin-top:40px;flex-wrap:wrap}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--orange);color:#111;font-weight:700;padding:10px 18px;border-radius:10px;transition:transform .25s;z-index:20}
+  .toast.on{transform:translateX(-50%) translateY(0)}
+  body:not(.dono) .own{display:none!important}
+  body:not(.dono) .card{cursor:default}
+  body:not(.dono) .card:hover{transform:none}
+  .lock{background:none;border:1px solid var(--line);border-radius:12px;width:44px;cursor:pointer;font-size:18px;opacity:.55}
+  .lock:hover{opacity:1;border-color:var(--orange)}
+  body.dono .lock{opacity:1;border-color:var(--orange)}
+  .btn:disabled{opacity:.6;cursor:wait}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div>
+      <h1>Minha Garagem</h1>
+      <div class="sub">Coleção de miniaturas 1:64</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="sTenho">0</b><span>Na garagem</span></div>
+      <div class="stat"><b id="sQuero">0</b><span>Na mira</span></div>
+      <button class="lock" id="lock" title="Entrar no modo edição">🔒</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="bar">
+    <div class="tabs">
+      <button class="tab on" data-tab="tenho">Tenho<span class="n" id="nTenho">0</span></button>
+      <button class="tab" data-tab="quero">Quero<span class="n" id="nQuero">0</span></button>
+    </div>
+    <input class="search" id="q" placeholder="Buscar por nome, série ou ano...">
+    <select class="search" id="fTipo"><option value="">Todos os tipos</option></select>
+    <button class="btn own" id="add">+ Adicionar</button>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="foot own">
+    <button class="btn ghost" id="exp">Salvar backup</button>
+  </div>
+</main>
+
+<div class="ov" id="ov">
+  <div class="modal">
+    <h2 id="mTitle">Novo carrinho</h2>
+    <div class="form">
+      <div class="col">
+        <div class="drop" id="drop">Clique, arraste ou cole (Ctrl+V) uma foto</div>
+        <input type="file" id="file" accept="image/*" hidden>
+        <div>
+          <label>Ou link da imagem</label>
+          <input class="fld" id="fUrl" placeholder="https://...">
+        </div>
+      </div>
+      <div class="col">
+        <div><label>Nome *</label><input class="fld" id="fNome" placeholder="Ex: Nissan Skyline GT-R (R34)"></div>
+        <div><label>Status</label>
+          <div class="seg" id="fStatus"><button data-v="tenho">Tenho</button><button data-v="quero">Quero</button></div>
+        </div>
+        <div class="row2">
+          <div><label>Ano</label><input class="fld" id="fAno" inputmode="numeric" placeholder="2024"></div>
+          <div><label>Tipo</label><select class="fld" id="fTipoM"></select></div>
+        </div>
+        <div><label>Série</label><input class="fld" id="fSerie" placeholder="Ex: HW J-Imports"></div>
+        <div class="row2">
+          <div><label id="lPreco">Preço pago</label><input class="fld" id="fPreco" placeholder="R$ 0,00"></div>
+          <div><label>Preço médio</label><input class="fld" id="fMedia" placeholder="R$ 0,00"></div>
+        </div>
+        <div><label>Observação</label><textarea class="fld" id="fObs"></textarea></div>
+      </div>
+    </div>
+    <div class="acts">
+      <button class="btn danger" id="del">Excluir</button>
+      <div><button class="btn ghost" id="cancel">Cancelar</button><button class="btn" id="save">Salvar</button></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const REPO="DevPedroZigi/minha-garagem", BRANCH="main", API=`https://api.github.com/repos/${REPO}/contents/`;
+const TIPOS=["Mainline","Premium","Treasure Hunt","Super Treasure Hunt","Car Culture","RLC","Outro"];
+const $=id=>document.getElementById(id);
+let cars=[], sha=null, tab="tenho", editing=null, foto="", status="tenho";
+let token=null; try{token=localStorage.getItem("garagemToken")}catch{}
+
+/* ---------- GitHub ---------- */
+const gh=(path,opt={})=>fetch(API+path+(opt.method?"":`?ref=${BRANCH}&t=${Date.now()}`),{...opt,
+  headers:{Authorization:`Bearer ${token}`,Accept:"application/vnd.github+json",...(opt.headers||{})}});
+const b64=s=>btoa(unescape(encodeURIComponent(s)));
+const unb64=s=>decodeURIComponent(escape(atob(s.replace(/\n/g,""))));
+
+async function carregar(){
+  if(token){
+    const r=await gh("dados.json");
+    if(r.ok){const j=await r.json();sha=j.sha;cars=JSON.parse(unb64(j.content));return}
+    if(r.status===401){sair();toast("Chave inválida ou expirada")}
+  }
+  const r=await fetch(`dados.json?t=${Date.now()}`);cars=await r.json();
+}
+async function putFile(path,contentB64,msg,fileSha){
+  const r=await gh(path,{method:"PUT",body:JSON.stringify({message:msg,content:contentB64,branch:BRANCH,...(fileSha?{sha:fileSha}:{})})});
+  if(!r.ok)throw new Error((await r.json()).message||r.status);
+  return (await r.json()).content.sha;
+}
+async function salvarDados(msg){
+  try{sha=await putFile("dados.json",b64(JSON.stringify(cars,null,1)),msg,sha)}
+  catch(e){ // alguém (outra aba) salvou antes: recarrega e avisa
+    toast("Erro ao salvar: "+e.message);await carregar();render();throw e}
+}
+async function subirFoto(id,dataUrl){
+  const ext=dataUrl.slice(5,dataUrl.indexOf(";")).split("/")[1].replace("jpeg","jpg");
+  const path=`fotos/${id}-${Date.now()}.${ext}`;
+  await putFile(path,dataUrl.split(",")[1],`Foto: ${id}`);
+  return path;
+}
+
+/* ---------- modo dono ---------- */
+function aplicarModo(){document.body.classList.toggle("dono",!!token);$("lock").textContent=token?"🔓":"🔒";
+  $("lock").title=token?"Sair do modo edição":"Entrar no modo edição"}
+function sair(){token=null;sha=null;try{localStorage.removeItem("garagemToken")}catch{}aplicarModo()}
+$("lock").onclick=async()=>{
+  if(token){if(confirm("Sair do modo edição neste navegador?")){sair();render()}return}
+  const t=(prompt("Cole sua chave do GitHub (token) para editar:")||"").trim();if(!t)return;
+  const r=await fetch(`https://api.github.com/repos/${REPO}`,{headers:{Authorization:`Bearer ${t}`}});
+  const j=r.ok?await r.json():null;
+  if(!j?.permissions?.push){alert("Essa chave não tem permissão de edição neste repositório.");return}
+  token=t;try{localStorage.setItem("garagemToken",t)}catch{}
+  aplicarModo();await carregar();render();toast("Modo edição ativado");
+};
+
+/* ---------- render ---------- */
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function tagCls(t){return t==="Super Treasure Hunt"?"sth":t==="Treasure Hunt"?"th":(t==="Premium"||t==="Car Culture"||t==="RLC")?"prem":""}
+function render(){
+  const q=$("q").value.trim().toLowerCase(), ft=$("fTipo").value;
+  const tenho=cars.filter(c=>c.status==="tenho").length, quero=cars.length-tenho;
+  $("sTenho").textContent=$("nTenho").textContent=tenho;
+  $("sQuero").textContent=$("nQuero").textContent=quero;
+  const list=cars.filter(c=>c.status===tab && (!ft||c.tipo===ft) &&
+      (!q||[c.nome,c.serie,c.ano,c.obs].join(" ").toLowerCase().includes(q)))
+    .sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"));
+  if(!list.length){
+    $("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>${q||ft?"Nada encontrado":tab==="tenho"?"Garagem vazia":"Nenhum na mira"}</b>${q||ft?"Tente outra busca.":""}</div>`;return;
+  }
+  $("grid").innerHTML=list.map(c=>`
+    <div class="card" data-id="${esc(c.id)}">
+      <div class="ph">${c.foto?`<img src="${esc(c.foto)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'none',textContent:'🏎'}))">`:`<span class="none">🏎</span>`}</div>
+      <div class="info">
+        <div class="name">${esc(c.nome)}</div>
+        ${(c.ano||c.serie)?`<div class="meta">${esc([c.ano,c.serie].filter(Boolean).join(" · "))}</div>`:""}
+        ${c.obs?`<div class="meta">${esc(c.obs)}</div>`:""}
+        <div class="tags">
+          ${c.tipo?`<span class="tag ${tagCls(c.tipo)}">${esc(c.tipo)}</span>`:""}
+          ${c.preco?`<span class="tag price own">${esc(c.preco)}</span>`:""}
+          ${c.media?`<span class="tag avg" title="Preço médio pesquisado">≈ ${esc(c.media)}</span>`:""}
+        </div>
+        ${c.status==="quero"?`<button class="got own" data-got="${esc(c.id)}">Peguei! 🏁</button>`:""}
+      </div>
+    </div>`).join("");
+}
+
+/* ---------- modal ---------- */
+function setFoto(src){foto=src||"";$("drop").innerHTML=foto?`<img src="${esc(foto)}" alt="">`:"Clique, arraste ou cole (Ctrl+V) uma foto"}
+function setStatus(s){status=s;[...$("fStatus").children].forEach(b=>b.classList.toggle("on",b.dataset.v===s));
+  $("lPreco").textContent=s==="tenho"?"Preço pago":"Quanto quer pagar"}
+function openModal(c){
+  editing=c||null;
+  $("mTitle").textContent=c?"Editar carrinho":"Novo carrinho";
+  $("fNome").value=c?.nome||"";$("fAno").value=c?.ano||"";$("fSerie").value=c?.serie||"";
+  $("fTipoM").value=c?.tipo||"Mainline";$("fPreco").value=c?.preco||"";$("fMedia").value=c?.media||"";$("fObs").value=c?.obs||"";
+  const f=c?.foto||"";setFoto(f);$("fUrl").value=/^https?:/.test(f)?f:"";
+  setStatus(c?.status||tab);$("del").style.visibility=c?"visible":"hidden";
+  $("ov").classList.add("on");setTimeout(()=>$("fNome").focus(),50);
+}
+const close=()=>$("ov").classList.remove("on");
+
+function resize(file){return new Promise(ok=>{const img=new Image(),u=URL.createObjectURL(file);
+  img.onload=()=>{const m=1000,k=Math.min(1,m/Math.max(img.width,img.height)),cv=document.createElement("canvas");
+    cv.width=img.width*k;cv.height=img.height*k;cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height);
+    URL.revokeObjectURL(u);ok(cv.toDataURL("image/webp",.85))};img.src=u})}
+async function useFile(f){if(f&&f.type.startsWith("image/")){setFoto(await resize(f));$("fUrl").value=""}}
+
+$("drop").onclick=()=>$("file").click();
+$("file").onchange=e=>useFile(e.target.files[0]);
+$("drop").ondragover=e=>{e.preventDefault();$("drop").classList.add("hot")};
+$("drop").ondragleave=()=>$("drop").classList.remove("hot");
+$("drop").ondrop=e=>{e.preventDefault();$("drop").classList.remove("hot");useFile(e.dataTransfer.files[0])};
+document.addEventListener("paste",e=>{if(!$("ov").classList.contains("on"))return;
+  const it=[...e.clipboardData.items].find(i=>i.type.startsWith("image/"));if(it){e.preventDefault();useFile(it.getAsFile())}});
+$("fUrl").oninput=e=>setFoto(e.target.value.trim());
+$("fStatus").onclick=e=>e.target.dataset.v&&setStatus(e.target.dataset.v);
+$("cancel").onclick=close;
+$("ov").onclick=e=>e.target===$("ov")&&close();
+document.addEventListener("keydown",e=>e.key==="Escape"&&close());
+
+async function ocupado(btn,fn){const t=btn.textContent;btn.disabled=true;btn.textContent="Salvando...";
+  try{await fn()}catch(e){console.error(e)}finally{btn.disabled=false;btn.textContent=t}}
+
+$("save").onclick=()=>ocupado($("save"),async()=>{
+  const nome=$("fNome").value.trim();if(!nome){$("fNome").focus();return}
+  const id=editing?.id||(nome.toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+Date.now().toString(36));
+  let f=foto;if(f.startsWith("data:"))f=await subirFoto(id,f);
+  const c={...(editing||{id,criado:Date.now()}),nome,status,foto:f,ano:$("fAno").value.trim(),serie:$("fSerie").value.trim(),
+    tipo:$("fTipoM").value,preco:$("fPreco").value.trim(),media:$("fMedia").value.trim(),obs:$("fObs").value.trim()};
+  const i=cars.findIndex(x=>x.id===c.id);if(i>=0)cars[i]=c;else cars.push(c);
+  await salvarDados(`${editing?"Editar":"Adicionar"}: ${nome}`);close();render();toast(editing?"Atualizado":"Adicionado!");
+});
+$("del").onclick=()=>{if(!editing||!confirm(`Excluir "${editing.nome}"?`))return;
+  ocupado($("del"),async()=>{cars=cars.filter(x=>x.id!==editing.id);await salvarDados(`Excluir: ${editing.nome}`);close();render();toast("Excluído")})};
+
+$("grid").onclick=async e=>{
+  if(!token)return;
+  const g=e.target.closest("[data-got]");
+  if(g){e.stopPropagation();const c=cars.find(x=>x.id===g.dataset.got);c.status="tenho";render();
+    try{await salvarDados(`Peguei: ${c.nome}`);toast("Pra garagem! 🏁")}catch{}return}
+  const card=e.target.closest(".card");if(card)openModal(cars.find(x=>x.id===card.dataset.id));
+};
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));render()});
+$("q").oninput=render;$("fTipo").onchange=render;
+$("add").onclick=()=>openModal();
+$("exp").onclick=()=>{const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(cars,null,1)],{type:"application/json"}));
+  a.download=`garagem-backup-${new Date().toISOString().slice(0,10)}.json`;a.click()};
+
+function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2200)}
+
+/* ---------- init ---------- */
+for(const t of TIPOS){$("fTipo").add(new Option(t,t));$("fTipoM").add(new Option(t,t))}
+aplicarModo();
+carregar().then(render).catch(e=>{$("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>Não consegui carregar a lista</b>${esc(e.message)}</div>`});
+</script>
+</body>
+</html>

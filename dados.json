@@ -1,0 +1,126 @@
+[
+ {
+  "id": "optimus-prime",
+  "nome": "Optimus Prime (Transformers)",
+  "status": "quero",
+  "tipo": "Mainline",
+  "ano": "2026",
+  "serie": "HW Screen Time 1/10",
+  "obs": "Nº 27/250",
+  "preco": "R$ 49,90",
+  "media": "R$ 80",
+  "foto": "fotos/web-optimus.jpg",
+  "criado": 1795502421256
+ },
+ {
+  "id": "minecart",
+  "nome": "Minecart (Minecraft)",
+  "status": "quero",
+  "tipo": "Mainline",
+  "serie": "HW Screen Time 2/10",
+  "obs": "Nº 9/250 – esqueleto",
+  "media": "R$ 60",
+  "foto": "fotos/minecart.webp",
+  "criado": 1795502421257
+ },
+ {
+  "id": "flintmobile",
+  "nome": "Flintmobile (The Flintstones)",
+  "status": "quero",
+  "tipo": "Mainline",
+  "ano": "2020",
+  "serie": "HW Screen Time 4/10",
+  "obs": "Nº 235/250",
+  "media": "R$ 110",
+  "foto": "fotos/web-flint.jpg",
+  "criado": 1795502421258
+ },
+ {
+  "id": "porsche-911-gt3r-team-transport",
+  "nome": "Porsche 911 GT3 R (992) + Fleet Flyer",
+  "status": "quero",
+  "tipo": "Car Culture",
+  "ano": "2026",
+  "serie": "Team Transport #97",
+  "obs": "Pintura AO Racing Rexy (dinossauro verde)",
+  "media": "R$ 250",
+  "foto": "fotos/porsche-911-gt3r-team-transport.webp",
+  "criado": 1795502421259
+ },
+ {
+  "id": "bmw-m3-gtr",
+  "nome": "BMW M3 GTR",
+  "status": "quero",
+  "tipo": "Premium",
+  "ano": "2026",
+  "serie": "Boulevard #142",
+  "media": "R$ 90",
+  "foto": "fotos/web-bmw.jpg",
+  "criado": 1795502421260
+ },
+ {
+  "id": "skyline-r34-godzilla",
+  "nome": "Nissan Skyline GT-R (BNR34) Godzilla",
+  "status": "quero",
+  "tipo": "Premium",
+  "ano": "2025",
+  "serie": "Pop Culture - Godzilla",
+  "media": "R$ 180",
+  "foto": "fotos/web-godzilla.jpg",
+  "criado": 1795502421261
+ },
+ {
+  "id": "350z-fast-furious",
+  "nome": "Nissan 350Z Custom",
+  "status": "quero",
+  "tipo": "Premium",
+  "ano": "2026",
+  "serie": "Fast & Furious 4/5 (25 anos)",
+  "media": "R$ 130",
+  "foto": "fotos/350z-fast-furious.webp",
+  "criado": 1795502421262
+ },
+ {
+  "id": "silvia-s15-naruto",
+  "nome": "Nissan Silvia (S15) Naruto",
+  "status": "quero",
+  "tipo": "Outro",
+  "serie": "Collectors Anime Series",
+  "obs": "Gold Spectraflame, livery itasha",
+  "media": "R$ 650",
+  "foto": "fotos/web-naruto.jpg",
+  "criado": 1795502421263
+ },
+ {
+  "id": "lancer-evo-ix-fast-furious",
+  "nome": "Mitsubishi Lancer Evolution IX",
+  "status": "quero",
+  "tipo": "Premium",
+  "ano": "2025",
+  "serie": "Fast & Furious 2/5 (Tokyo Drift)",
+  "media": "R$ 110",
+  "foto": "fotos/lancer-evo-ix-fast-furious.webp",
+  "criado": 1795502421264
+ },
+ {
+  "id": "skyline-r34-laranja-fast-furious",
+  "nome": "Nissan Skyline GT-R (BNR34) Laranja",
+  "status": "quero",
+  "tipo": "Premium",
+  "serie": "Fast & Furious 5/5",
+  "media": "R$ 150",
+  "foto": "fotos/skyline-r34-laranja-fast-furious.webp",
+  "criado": 1795502421265
+ },
+ {
+  "id": "skyline-r34-brian-fast-furious",
+  "nome": "Nissan Skyline GT-R (BNR34) Brian",
+  "status": "quero",
+  "tipo": "Premium",
+  "serie": "Fast & Furious 4/5",
+  "obs": "Prata com faixas azuis",
+  "media": "R$ 150",
+  "foto": "fotos/web-brian.jpg",
+  "criado": 1795502421266
+ }
+]
