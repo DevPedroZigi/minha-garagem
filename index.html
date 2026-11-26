@@ -109,6 +109,22 @@
   .lock:hover{opacity:1;border-color:var(--accent)}
   body.dono .lock{opacity:1;border-color:var(--accent)}
   .btn:disabled{opacity:.6;cursor:wait}
+  .btn.prio{background:linear-gradient(135deg,#E4002B,#a8001f);box-shadow:0 0 0 1px #ff2b4f55,0 8px 22px -10px var(--accent-glow)}
+  .btn.prio:hover{background:linear-gradient(135deg,#FF2B4F,#c4002a)}
+  .btn.prio.on{background:#fff;color:var(--accent);box-shadow:0 0 0 2px var(--accent),0 8px 26px -8px var(--accent-glow)}
+  body.vprio .tab.on{background:none;color:var(--mut)}
+  body.vprio #fOrdem{display:none}
+  .prioInfo{display:none;margin:-8px 0 20px;padding:14px 18px;border-radius:14px;border:1px solid #5a1530;
+    background:linear-gradient(90deg,#3a0a1c,transparent);color:var(--txt);font-size:14px}
+  .prioInfo b{color:var(--yellow);font-family:"Racing Sans One";font-weight:400;font-size:18px;letter-spacing:.5px}
+  body.vprio .prioInfo{display:block}
+  .rank{position:absolute;top:10px;left:10px;z-index:2;min-width:38px;height:38px;padding:0 8px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;
+    font-family:"Racing Sans One";font-size:20px;box-shadow:0 6px 16px -6px var(--accent-glow)}
+  .rank.top{background:var(--yellow);color:#111}
+  .mv{position:absolute;top:10px;right:10px;z-index:2;display:flex;gap:6px}
+  .mv button{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:#0b1130cc;color:#fff;cursor:pointer;font-size:14px}
+  .mv button:hover{border-color:var(--accent);background:var(--accent)}
 </style>
 </head>
 <body>
@@ -142,8 +158,10 @@
       <option value="caro">Mais caro primeiro</option>
       <option value="nome">Ordem: nome (A–Z)</option>
     </select>
+    <button class="btn prio" id="prio" title="Os que eu mais quero, em ordem de preferência">🎁 Prioridades do Kyzam</button>
     <button class="btn own" id="add">+ Adicionar</button>
   </div>
+  <div class="prioInfo"><b>Em dúvida do que me dar de presente?</b><br>Esses são os carrinhos que eu mais quero, em ordem de preferência: o nº 1 é o que eu mais quero.</div>
   <div class="grid" id="grid"></div>
   <div class="foot own">
     <button class="btn ghost" id="exp">Salvar backup</button>
@@ -176,6 +194,7 @@
           <div><label id="lPreco">Preço pago</label><input class="fld" id="fPreco" placeholder="R$ 0,00"></div>
           <div><label>Preço médio</label><input class="fld" id="fMedia" placeholder="R$ 0,00"></div>
         </div>
+        <div id="wPrio"><label>Prioridade (1 = o que mais quero · vazio = sem prioridade)</label><input class="fld" id="fPrio" inputmode="numeric" placeholder="Ex: 1"></div>
         <div><label>Observação</label><textarea class="fld" id="fObs"></textarea></div>
       </div>
     </div>
@@ -250,6 +269,10 @@ function render(){
   const tenho=cars.filter(c=>c.status==="tenho").length, quero=cars.length-tenho;
   $("sTenho").textContent=$("nTenho").textContent=tenho;
   $("sQuero").textContent=$("nQuero").textContent=quero;
+  const vp=tab==="prio";document.body.classList.toggle("vprio",vp);$("prio").classList.toggle("on",vp);
+  if(vp){const pl=prioLista().filter(c=>(!ft||c.tipo===ft)&&(!q||[c.nome,c.serie,c.ano,c.obs].join(" ").toLowerCase().includes(q)));
+    if(!pl.length){$("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>${q||ft?"Nada encontrado":"Lista de prioridades vazia"}</b>${q||ft?"Tente outra busca.":"Ainda não escolhi minhas prioridades."}</div>`;return}
+    $("grid").innerHTML=pl.map(c=>cardHTML(c,prioLista().indexOf(c)+1)).join("");return}
   const list=cars.filter(c=>c.status===tab && (!ft||c.tipo===ft) &&
       (!q||[c.nome,c.serie,c.ano,c.obs].join(" ").toLowerCase().includes(q)))
     .sort((a,b)=>{
@@ -260,9 +283,16 @@ function render(){
   if(!list.length){
     $("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>${q||ft?"Nada encontrado":tab==="tenho"?"Garagem vazia":"Nenhum na mira"}</b>${q||ft?"Tente outra busca.":""}</div>`;return;
   }
-  $("grid").innerHTML=list.map(c=>`
+  $("grid").innerHTML=list.map(c=>cardHTML(c)).join("");
+}
+// lista de prioridade: só "quero" com número, em ordem (1 = mais quero)
+function prioLista(){return cars.filter(c=>c.status==="quero"&&Number(c.prioridade)>0)
+  .sort((a,b)=>a.prioridade-b.prioridade||a.nome.localeCompare(b.nome,"pt-BR"))}
+function renumerar(){prioLista().forEach((c,i)=>c.prioridade=i+1);
+  cars.forEach(c=>{if(c.status!=="quero"||!(Number(c.prioridade)>0))delete c.prioridade})}
+function cardHTML(c,rank){return `
     <div class="card" data-id="${esc(c.id)}">
-      <div class="ph">${c.foto?`<img src="${esc(c.foto)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'none',textContent:'🏎'}))">`:`<span class="none">🏎</span>`}</div>
+      <div class="ph">${rank?`<span class="rank${rank===1?" top":""}">#${rank}</span><span class="mv own"><button data-mv="-1" data-id="${esc(c.id)}" title="Subir">▲</button><button data-mv="1" data-id="${esc(c.id)}" title="Descer">▼</button></span>`:""}${c.foto?`<img src="${esc(c.foto)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'none',textContent:'🏎'}))">`:`<span class="none">🏎</span>`}</div>
       <div class="info">
         <div class="name">${esc(c.nome)}</div>
         ${(c.ano||c.serie)?`<div class="meta">${esc([c.ano,c.serie].filter(Boolean).join(" · "))}</div>`:""}
@@ -274,18 +304,17 @@ function render(){
         </div>
         ${c.status==="quero"?`<button class="got own" data-got="${esc(c.id)}">Peguei! 🏁</button>`:""}
       </div>
-    </div>`).join("");
-}
+    </div>`}
 
 /* ---------- modal ---------- */
 function setFoto(src){foto=src||"";$("drop").innerHTML=foto?`<img src="${esc(foto)}" alt="">`:"Clique, arraste ou cole (Ctrl+V) uma foto"}
 function setStatus(s){status=s;[...$("fStatus").children].forEach(b=>b.classList.toggle("on",b.dataset.v===s));
-  $("lPreco").textContent=s==="tenho"?"Preço pago":"Quanto quer pagar"}
+  $("lPreco").textContent=s==="tenho"?"Preço pago":"Quanto quer pagar";$("wPrio").style.display=s==="quero"?"":"none"}
 function openModal(c){
   editing=c||null;
   $("mTitle").textContent=c?"Editar carrinho":"Novo carrinho";
   $("fNome").value=c?.nome||"";$("fAno").value=c?.ano||"";$("fSerie").value=c?.serie||"";
-  $("fTipoM").value=c?.tipo||"Mainline";$("fPreco").value=c?.preco||"";$("fMedia").value=c?.media||"";$("fObs").value=c?.obs||"";
+  $("fTipoM").value=c?.tipo||"Mainline";$("fPreco").value=c?.preco||"";$("fMedia").value=c?.media||"";$("fObs").value=c?.obs||"";$("fPrio").value=c?.prioridade||"";
   const f=c?.foto||"";setFoto(f);$("fUrl").value=/^https?:/.test(f)?f:"";
   setStatus(c?.status||tab);$("del").style.visibility=c?"visible":"hidden";
   $("ov").classList.add("on");setTimeout(()=>$("fNome").focus(),50);
@@ -320,7 +349,12 @@ $("save").onclick=()=>ocupado($("save"),async()=>{
   let f=foto;if(f.startsWith("data:"))f=await subirFoto(id,f);
   const c={...(editing||{id,criado:Date.now()}),nome,status,foto:f,ano:$("fAno").value.trim(),serie:$("fSerie").value.trim(),
     tipo:$("fTipoM").value,preco:$("fPreco").value.trim(),media:$("fMedia").value.trim(),obs:$("fObs").value.trim()};
+  const np=parseInt($("fPrio").value,10);
   const i=cars.findIndex(x=>x.id===c.id);if(i>=0)cars[i]=c;else cars.push(c);
+  if(status==="quero"&&np>0){ // entra na posição pedida e empurra os outros
+    const outros=prioLista().filter(x=>x!==c);outros.splice(Math.min(np,outros.length+1)-1,0,c);outros.forEach((x,k)=>x.prioridade=k+1)}
+  else delete c.prioridade;
+  renumerar();
   await salvarDados(`${editing?"Editar":"Adicionar"}: ${nome}`);close();render();toast(editing?"Atualizado":"Adicionado!");
 });
 $("del").onclick=()=>{if(!editing||!confirm(`Excluir "${editing.nome}"?`))return;
@@ -328,13 +362,20 @@ $("del").onclick=()=>{if(!editing||!confirm(`Excluir "${editing.nome}"?`))return
 
 $("grid").onclick=async e=>{
   if(!token)return;
+  const m=e.target.closest("[data-mv]");
+  if(m){e.stopPropagation();const l=prioLista(),k=l.findIndex(x=>x.id===m.dataset.id),j=k+Number(m.dataset.mv);
+    if(j<0||j>=l.length)return;[l[k],l[j]]=[l[j],l[k]];l.forEach((x,n)=>x.prioridade=n+1);render();
+    try{await salvarDados(`Prioridade: ${l[j].nome} -> #${j+1}`)}catch{}return}
   const g=e.target.closest("[data-got]");
-  if(g){e.stopPropagation();const c=cars.find(x=>x.id===g.dataset.got);c.status="tenho";render();
+  if(g){e.stopPropagation();const c=cars.find(x=>x.id===g.dataset.got);c.status="tenho";renumerar();render();
     try{await salvarDados(`Peguei: ${c.nome}`);toast("Pra garagem! 🏁")}catch{}return}
   const card=e.target.closest(".card");if(card)openModal(cars.find(x=>x.id===card.dataset.id));
 };
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));render()});
+$("prio").onclick=()=>{tab=tab==="prio"?"quero":"prio";
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.tab===(tab==="prio"?"quero":tab)));render();
+  if(tab==="prio")$("grid").scrollIntoView({behavior:"smooth",block:"start"})};
 $("q").oninput=render;$("fTipo").onchange=render;
 try{const o=localStorage.getItem("garagemOrdem");if(o)$("fOrdem").value=o}catch{}
 $("fOrdem").onchange=()=>{try{localStorage.setItem("garagemOrdem",$("fOrdem").value)}catch{}render()};
