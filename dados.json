@@ -152,7 +152,7 @@
   "nome": "92 Jeep Wrangler Sahara (Jurassic World)",
   "serie": "Pop Culture - Jurassic World",
   "media": "R$ 95",
-  "obs": "OLX R$ 79–120 (3 anúncios)",
+  "obs": "Branco e azul · lançamento novo, ainda sem foto oficial da cartela · OLX R$ 79–120 (3 anúncios)",
   "foto": "fotos/n/jeep-wrangler-jurassic-world.jpg?v=mwyciag6",
   "marca": "Hot Wheels"
  },
@@ -657,5 +657,19 @@
   "obs": "Mini GT 1:64 · PRÉ-VENDA (reservas desde 10/11/2026) · previsão de lançamento: maio–junho de 2027 · lá fora ¥3.630 (~R$ 130) + frete",
   "foto": "fotos/n/minigt-1430-bmw-m4-33.jpg?v=mwycicxf",
   "marca": "Mini GT"
+ },
+ {
+  "tipo": "Premium",
+  "status": "quero",
+  "criado": 1795746295553,
+  "id": "jeep-wrangler-jurassic-park",
+  "nome": "92 Jeep Wrangler Sahara (Jurassic Park)",
+  "marca": "Hot Wheels",
+  "ano": "2025",
+  "serie": "Pop Culture – Jurassic Park",
+  "preco": "",
+  "media": "R$ 110",
+  "obs": "Cinza com faixa vermelha #18 · JBL59 · Mercado Livre R$ 80–135",
+  "foto": "fotos/n/jeep-wrangler-jurassic-park.jpg?v=mwycz9ye"
  }
 ]
