@@ -175,9 +175,75 @@
   .topo.on{opacity:1;transform:none;pointer-events:auto}
   .topo:hover{background:var(--accent);border-color:var(--accent)}
   .topo svg{width:22px;height:22px}
-  footer{max-width:1240px;margin:0 auto;padding:8px 24px 40px;text-align:center;font-size:13px;color:var(--mut)}
-  footer a{color:inherit;text-underline-offset:3px}
-  footer a:hover{color:#fff}
+  /* ---------- foto clicável ---------- */
+  .ver{all:unset;display:block;width:100%;height:100%;cursor:zoom-in;overflow:hidden}
+  .ver img{transition:transform .5s var(--ease)}
+  .ver:focus-visible{outline:2px solid var(--yellow);outline-offset:-4px}
+  @media (hover:hover){.card:hover .ver img,.destaque:hover .ver img{transform:scale(1.04)}}
+
+  /* ---------- destaque do 1º ---------- */
+  .destaque{display:grid;grid-template-columns:minmax(260px,400px) 1fr;gap:clamp(20px,4vw,56px);align-items:center;margin-bottom:22px;padding:18px;
+    border:1px solid var(--line2);border-radius:18px;background:radial-gradient(90% 120% at 100% 0%,#1a2560 0%,var(--card) 55%);position:relative;overflow:hidden}
+  body.dono .destaque{cursor:pointer}
+  .dest-ph{aspect-ratio:4/5;background:#fff;border-radius:12px}
+  .dest-ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .dest-info{display:flex;flex-direction:column;gap:8px;min-width:0;padding:8px 8px 8px 0}
+  .dest-rank{font-family:"Racing Sans One";font-style:italic;color:var(--yellow);font-size:clamp(72px,9vw,128px);line-height:.85;letter-spacing:-.02em}
+  .dest-nome{margin:6px 0 0;font-family:"Racing Sans One";font-weight:400;font-style:italic;font-size:clamp(30px,4vw,52px);line-height:1.02;text-wrap:balance;overflow-wrap:break-word}
+  .destaque .meta{font-size:16px}
+  .destaque .preco b{font-size:clamp(30px,3.4vw,40px)}
+  .destaque .preco span{font-size:15px}
+  .destaque .tags{margin-top:4px;padding-top:0}
+  .dest-acoes{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .dest-acoes .btn{min-width:190px}
+  .destaque .btn.got{background:transparent;color:var(--yellow);border:1px dashed var(--yellow)}
+
+  /* ---------- faixa de nomes ---------- */
+  .faixa{overflow:hidden;padding:6px 0 22px;margin-top:-8px;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+  .trilho{display:flex;align-items:center;gap:28px;width:max-content;will-change:transform;
+    font-family:"Racing Sans One";font-style:italic;font-size:clamp(40px,7vw,92px);line-height:1;white-space:nowrap;
+    color:transparent;-webkit-text-stroke:1.2px rgba(198,204,226,.38)}
+  .trilho .cheio{color:var(--accent);-webkit-text-stroke:0}
+  .trilho i{width:.32em;height:.32em;background:var(--yellow);transform:skewX(-20deg);flex:none}
+
+  /* ---------- barra fixa ---------- */
+  .mini{position:fixed;top:12px;left:50%;z-index:18;display:flex;align-items:center;gap:10px;padding:6px 6px 6px 18px;
+    background:rgba(9,14,38,.92);border:1px solid var(--line2);border-radius:999px;box-shadow:0 16px 34px -16px rgba(0,0,0,.9);
+    transform:translate(-50%,-90px);transition:transform .45s var(--ease)}
+  @supports (backdrop-filter:blur(10px)){.mini{background:rgba(9,14,38,.78);backdrop-filter:blur(14px) saturate(1.3)}}
+  .mini.on{transform:translate(-50%,0)}
+  .mini-logo{font-family:"Racing Sans One";font-style:italic;font-size:24px;color:#fff;text-decoration:none;line-height:1;margin-right:4px}
+  .mini-tabs{display:flex;background:var(--bg);border-radius:999px;padding:3px}
+  .mini-tabs button{border:0;background:none;color:var(--mut);font-weight:700;font-style:italic;text-transform:uppercase;font-size:13px;letter-spacing:.03em;
+    min-height:36px;padding:0 14px;border-radius:999px;cursor:pointer}
+  .mini-tabs button[aria-pressed="true"]{background:var(--accent);color:#fff}
+  .mini-saule{min-height:40px;padding:8px 16px;border-radius:999px;font-size:13px}
+
+  /* ---------- visor de foto ---------- */
+  .visor{border:1px solid var(--line2);border-radius:20px;background:var(--bg2);color:var(--txt);padding:0;width:min(940px,94vw);max-height:92vh;overflow:auto}
+  .visor::backdrop{background:rgba(3,5,15,.82)}
+  .visor[open]{display:grid;grid-template-columns:minmax(0,1.1fr) 1fr}
+  .visor-ph{background:#fff;display:flex;align-items:center;justify-content:center}
+  .visor-ph img{width:100%;height:auto;max-height:86vh;object-fit:contain;display:block}
+  .visor-info{padding:28px;display:flex;flex-direction:column;gap:8px;justify-content:center}
+  .visor-info h2{margin:0;font-family:"Racing Sans One";font-weight:400;font-style:italic;font-size:clamp(28px,3.2vw,40px);line-height:1.05;text-wrap:balance}
+  .visor-info .meta{margin:0;font-size:16px}
+  .visor-info .preco b{font-size:34px}
+  .visor-x{position:absolute;top:12px;right:12px;z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid var(--line2);background:rgba(9,14,38,.85);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .visor-x:hover{background:var(--accent);border-color:var(--accent)}
+  @media (prefers-reduced-motion:no-preference){.visor[open]{animation:surge .35s var(--ease)}}
+  @keyframes surge{from{opacity:0;transform:translateY(12px) scale(.98)}}
+
+  /* ---------- rodapé ---------- */
+  footer{margin-top:24px;border-top:1px solid var(--line);overflow:hidden}
+  .rod{max-width:1240px;margin:0 auto;padding:56px 24px 0;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
+  .rod-cta h2{margin:0 0 6px;font-family:"Racing Sans One";font-weight:400;font-style:italic;font-size:clamp(28px,3.4vw,40px);line-height:1.05}
+  .rod-cta p{margin:0 0 18px;color:#C6CCE2}
+  .rod-marca{margin:0 0 -0.18em;font-family:"Racing Sans One";font-style:italic;font-size:clamp(96px,17vw,240px);line-height:.9;color:transparent;
+    -webkit-text-stroke:1.5px var(--line2);user-select:none}
+  .credito{max-width:1240px;margin:0 auto;padding:22px 24px 36px;text-align:center;font-size:13px;color:var(--mut)}
+  .credito a{color:inherit;text-underline-offset:3px}
+  .credito a:hover{color:#fff}
 
   /* ---------- celular ---------- */
   @media (max-width:640px){
@@ -203,6 +269,22 @@
     .rank{min-width:34px;height:34px;font-size:18px;top:8px;left:8px}
     .mv{top:8px;right:8px}.mv button{width:36px;height:36px}
     .form{grid-template-columns:1fr}
+    .destaque{grid-template-columns:1fr;padding:12px;gap:14px}
+    .dest-ph{max-width:340px;width:100%;margin:0 auto}
+    .dest-info{padding:0 4px 6px}
+    .dest-rank{font-size:64px}
+    .dest-acoes .btn{flex:1 1 100%;min-width:0}
+    .faixa{padding:2px 0 16px}
+    .mini{top:auto;bottom:calc(14px + env(safe-area-inset-bottom));padding:5px 5px 5px 14px;transform:translate(-50%,90px);max-width:calc(100vw - 92px);left:calc(50% - 30px)}
+    .mini-logo{font-size:20px}
+    .mini-tabs button{padding:0 11px;font-size:12px}
+    .mini-saule{padding:8px 12px}.mini-saule span{display:none}
+    .visor[open]{grid-template-columns:1fr}
+    .visor-ph img{max-height:60vh}
+    .visor-info{padding:18px 18px 22px}
+    .rod{padding-top:40px}
+    .rod-marca{font-size:28vw}
+    .credito{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
     .topo{bottom:calc(18px + env(safe-area-inset-bottom))}
   }
 </style>
@@ -226,7 +308,20 @@
   <canvas id="cena3d" role="img" aria-label="BMW M4 GT3 preto andando numa pista de corrida à noite"></canvas>
 </header>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script type="module" src="carro3d.js?v=10"></script>
+<script type="module" src="carro3d.js?v=11"></script>
+
+<nav class="mini" aria-label="Atalhos" inert>
+  <a class="mini-logo" href="#" translate="no" aria-label="Kyzam: voltar ao topo">Kyzam</a>
+  <div class="mini-tabs">
+    <button data-tab="quero" aria-pressed="true">Quero</button>
+    <button data-tab="tenho" aria-pressed="false">Tenho</button>
+  </div>
+  <a class="btn saule-link mini-saule" target="_blank" rel="noopener" aria-label="Falar com o Saule no WhatsApp">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.5L3 21l2-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg><span>Saule</span>
+  </a>
+</nav>
+
+<div class="faixa" aria-hidden="true"><div class="trilho" id="trilho"></div></div>
 
 <main id="conteudo">
   <section class="presente" aria-labelledby="tPresente">
@@ -257,13 +352,39 @@
     </select>
     <button class="btn own" id="add">+ Adicionar</button>
   </div>
-  <div id="lista" aria-live="polite"></div>
+  <div id="lista"></div>
   <div class="foot own">
     <button class="btn ghost" id="exp">Salvar backup</button>
   </div>
 </main>
 
-<footer>Modelo 3D: <a href="https://sketchfab.com/3d-models/2025-bmw-m4-gt3-evo-g82-113f83dd87064697a5ec2511d280b9d5" target="_blank" rel="noopener">2025 BMW M4 GT3 EVO G82</a> por Ddiaz Design, <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> (adaptado: pintura e compressão)</footer>
+<footer>
+  <div class="rod">
+    <div class="rod-cta">
+      <h2>Achou um que eu quero?</h2>
+      <p>O Saule separa pra você. É só mandar mensagem.</p>
+      <a class="btn saule-link" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.5L3 21l2-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg>
+        Falar com o Saule
+      </a>
+    </div>
+    <p class="rod-marca" aria-hidden="true" translate="no">Kyzam</p>
+  </div>
+  <p class="credito">Modelo 3D: <a href="https://sketchfab.com/3d-models/2025-bmw-m4-gt3-evo-g82-113f83dd87064697a5ec2511d280b9d5" target="_blank" rel="noopener">2025 BMW M4 GT3 EVO G82</a> por Ddiaz Design, <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> (adaptado: pintura e compressão)</p>
+</footer>
+
+<dialog class="visor" id="visor" aria-labelledby="vNome">
+  <button class="visor-x" id="vFechar" aria-label="Fechar">
+    <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="visor-ph" id="vPh"></div>
+  <div class="visor-info">
+    <h2 id="vNome">Cartela</h2>
+    <p class="meta" id="vMeta"></p>
+    <div class="preco" id="vPreco"></div>
+    <div class="dest-acoes" id="vAcoes"></div>
+  </div>
+</dialog>
 
 <div class="ov" id="ov">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
@@ -398,10 +519,36 @@ function render(){
   const todos=prioLista(), pl=todos.filter(filtra);
   const resto=ordenar(cars.filter(c=>c.status==="quero"&&!(Number(c.prioridade)>0)&&filtra(c)));
   if(!pl.length&&!resto.length){$("lista").innerHTML=vazio(q||ft?"Nada encontrado":"Nenhum na mira",q||ft?"Tente outro nome ou tire o filtro.":"");return}
+  // o 1º da lista ganha destaque grande (só sem busca/filtro, para não "pular" ao buscar)
+  const dest=pl.length&&todos.indexOf(pl[0])===0&&!q&&!ft?pl[0]:null;
+  const grade=dest?pl.slice(1):pl;
   $("lista").innerHTML=
-    (pl.length?secao("Os que eu mais quero","Em ordem: o 1º é o que eu mais quero.",pl.map(c=>cardHTML(c,todos.indexOf(c)+1)).join(""),"prio"):"")+
+    (pl.length?`<section class="secao prio"><div class="secao-tit"><h2>Os que eu mais quero</h2><p>Em ordem: o 1º é o que eu mais quero.</p></div>${dest?destaqueHTML(dest):""}${grade.length?`<div class="grid">${grade.map(c=>cardHTML(c,todos.indexOf(c)+1)).join("")}</div>`:""}</section>`:"")+
     (resto.length?secao(pl.length?"Também quero":"","",resto.map(c=>cardHTML(c)).join("")):"");
 }
+const IMG=(c,cls="")=>c.foto?`<img${cls?` class="${cls}"`:""} src="${esc(c.foto)}" alt="Cartela do ${esc(c.nome)}" width="800" height="1000" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'none',textContent:'Sem foto'}))">`:`<span class="none">Sem foto</span>`;
+const BOTOES_COMPRA=c=>`<a class="btn" href="${zap(msgSaule(c))}" target="_blank" rel="noopener" aria-label="Pedir ${esc(c.nome)} pro Saule no WhatsApp">Pedir pro Saule</a>
+          <a class="btn ghost" href="${linkML(c)}" target="_blank" rel="noopener" aria-label="Buscar ${esc(c.nome)} no Mercado Livre">Mercado Livre</a>`;
+function destaqueHTML(c){const id=esc(c.id);return `
+    <article class="destaque" data-id="${id}">
+      <button class="dest-ph ver" data-ver="${id}" aria-label="Ver a cartela do ${esc(c.nome)} em tamanho grande">${IMG(c).replace('loading="lazy"','fetchpriority="high"')}</button>
+      <div class="dest-info">
+        <span class="dest-rank" aria-label="Prioridade 1">1º</span>
+        <h3 class="dest-nome">${esc(c.nome)}</h3>
+        ${(c.ano||c.serie)?`<div class="meta">${esc([c.serie,c.ano].filter(Boolean).join(", "))}</div>`:""}
+        ${c.media?`<div class="preco"><b>${esc(c.media)}</b><span>preço médio</span></div>`:""}
+        <div class="tags">
+          <span class="tag marca ${marcaCls(c.marca)}">${esc(c.marca||"Hot Wheels")}</span>
+          ${c.tipo?`<span class="tag ${tagCls(c.tipo)}">${esc(c.tipo)}</span>`:""}
+          ${c.preco?`<span class="tag price own">Pagar até ${esc(c.preco)}</span>`:""}
+        </div>
+        ${c.obs?`<div class="obs own">${esc(c.obs)}</div>`:""}
+        <div class="dest-acoes">${BOTOES_COMPRA(c)}
+          <button class="btn got own" data-got="${id}">Peguei!</button>
+          <button class="btn ghost own" data-edit="${id}">Editar</button>
+        </div>
+      </div>
+    </article>`}
 // lista de prioridade: só "quero" com número, em ordem (1 = mais quero)
 function prioLista(){return cars.filter(c=>c.status==="quero"&&Number(c.prioridade)>0)
   .sort((a,b)=>a.prioridade-b.prioridade||a.nome.localeCompare(b.nome,"pt-BR"))}
@@ -410,7 +557,7 @@ function renumerar(){prioLista().forEach((c,i)=>c.prioridade=i+1);
 const SETA=d=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
 function cardHTML(c,rank){const id=esc(c.id),quero=c.status==="quero";return `
     <article class="card" data-id="${id}">
-      <div class="ph">${rank?`<span class="rank${rank===1?" r1":""}" aria-label="Prioridade ${rank}">${rank}º</span><span class="mv own"><button data-mv="-1" data-id="${id}" aria-label="Subir ${esc(c.nome)} na prioridade">${SETA("M12 19V5M5 12l7-7 7 7")}</button><button data-mv="1" data-id="${id}" aria-label="Descer ${esc(c.nome)} na prioridade">${SETA("M12 5v14M19 12l-7 7-7-7")}</button></span>`:""}${c.foto?`<img src="${esc(c.foto)}" alt="Cartela do ${esc(c.nome)}" width="800" height="1000" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'none',textContent:'Sem foto'}))">`:`<span class="none">Sem foto</span>`}</div>
+      <div class="ph">${rank?`<span class="rank${rank===1?" r1":""}" aria-label="Prioridade ${rank}">${rank}º</span><span class="mv own"><button data-mv="-1" data-id="${id}" aria-label="Subir ${esc(c.nome)} na prioridade">${SETA("M12 19V5M5 12l7-7 7 7")}</button><button data-mv="1" data-id="${id}" aria-label="Descer ${esc(c.nome)} na prioridade">${SETA("M12 5v14M19 12l-7 7-7-7")}</button></span>`:""}<button class="ver" data-ver="${id}" aria-label="Ver a cartela do ${esc(c.nome)} em tamanho grande">${IMG(c)}</button></div>
       <div class="info">
         <h3 class="name">${esc(c.nome)}</h3>
         ${(c.ano||c.serie)?`<div class="meta">${esc([c.serie,c.ano].filter(Boolean).join(", "))}</div>`:""}
@@ -422,8 +569,7 @@ function cardHTML(c,rank){const id=esc(c.id),quero=c.status==="quero";return `
           ${c.preco?`<span class="tag price own">${quero?"Pagar até ":"Paguei "}${esc(c.preco)}</span>`:""}
         </div>
         ${quero?`<div class="acoes">
-          <a class="btn" href="${zap(msgSaule(c))}" target="_blank" rel="noopener" aria-label="Pedir ${esc(c.nome)} pro Saule no WhatsApp">Pedir pro Saule</a>
-          <a class="btn ghost" href="${linkML(c)}" target="_blank" rel="noopener" aria-label="Buscar ${esc(c.nome)} no Mercado Livre">Mercado Livre</a>
+          ${BOTOES_COMPRA(c)}
           <button class="btn got own" data-got="${id}">Peguei!</button>
         </div>`:""}
         <button class="btn ghost own" data-edit="${id}" style="margin-top:8px;min-height:40px;font-size:13px">Editar</button>
@@ -485,7 +631,20 @@ $("save").onclick=()=>ocupado($("save"),async()=>{
 $("del").onclick=()=>{if(!editing||!confirm(`Excluir "${editing.nome}"?`))return;
   ocupado($("del"),async()=>{cars=cars.filter(x=>x.id!==editing.id);await salvarDados(`Excluir: ${editing.nome}`);close();render();toast("Excluído")})};
 
+/* ---------- foto grande ---------- */
+function abrirVisor(c){
+  $("vPh").innerHTML=`<img src="${esc(c.foto)}" alt="Cartela do ${esc(c.nome)}">`;$("vNome").textContent=c.nome;
+  $("vMeta").textContent=[c.serie,c.ano].filter(Boolean).join(", ");
+  $("vPreco").innerHTML=c.media?`<b>${esc(c.media)}</b><span>preço médio</span>`:"";
+  $("vAcoes").innerHTML=c.status==="quero"?BOTOES_COMPRA(c):"";
+  $("visor").showModal();
+}
+$("vFechar").onclick=()=>$("visor").close();
+$("visor").onclick=e=>{if(e.target===$("visor"))$("visor").close()};
+
 $("lista").onclick=async e=>{
+  const v=e.target.closest("[data-ver]");
+  if(v){const c=cars.find(x=>x.id===v.dataset.ver);if(c?.foto)abrirVisor(c);return}
   if(!token||e.target.closest("a"))return;
   const m=e.target.closest("[data-mv]");
   if(m){e.stopPropagation();const l=prioLista(),k=l.findIndex(x=>x.id===m.dataset.id),j=k+Number(m.dataset.mv);
@@ -494,10 +653,12 @@ $("lista").onclick=async e=>{
   const g=e.target.closest("[data-got]");
   if(g){e.stopPropagation();const c=cars.find(x=>x.id===g.dataset.got);c.status="tenho";renumerar();render();
     try{await salvarDados(`Peguei: ${c.nome}`);toast("Foi pra garagem")}catch{}return}
-  const card=e.target.closest(".card");if(card)openModal(cars.find(x=>x.id===card.dataset.id));
+  const card=e.target.closest(".card,.destaque");if(card)openModal(cars.find(x=>x.id===card.dataset.id));
 };
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;
-  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===b));render()});
+function trocarAba(t){tab=t;document.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute(x.closest(".mini")?"aria-pressed":"aria-selected",x.dataset.tab===t));render()}
+document.querySelectorAll(".tabs .tab").forEach(b=>b.onclick=()=>trocarAba(b.dataset.tab));
+document.querySelectorAll(".mini [data-tab]").forEach(b=>b.onclick=()=>{trocarAba(b.dataset.tab);
+  scrollTo({top:$("lista").getBoundingClientRect().top+scrollY-90,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})});
 $("q").oninput=render;$("fTipo").onchange=render;
 try{const o=localStorage.getItem("garagemOrdem");if(o)$("fOrdem").value=o}catch{}
 $("fOrdem").onchange=()=>{try{localStorage.setItem("garagemOrdem",$("fOrdem").value)}catch{}render()};
@@ -508,16 +669,31 @@ $("exp").onclick=()=>{const a=document.createElement("a");
 
 function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2600)}
 
-/* ---------- voltar ao topo ---------- */
-{const b=$("topo"),ver=()=>b.classList.toggle("on",scrollY>innerHeight*.6);
-  addEventListener("scroll",ver,{passive:true});ver();
-  b.onclick=()=>scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
+/* ---------- rolagem: voltar ao topo, barra fixa, paralaxe do topo e faixa de nomes ---------- */
+{const b=$("topo"),mini=document.querySelector(".mini"),top=document.querySelector("header .top"),trilho=$("trilho"),faixa=document.querySelector(".faixa");
+  const calmo=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let pedido=false;
+  const quadro=()=>{pedido=false;const y=scrollY,h=innerHeight;
+    b.classList.toggle("on",y>h*.6);
+    const passou=y>document.querySelector("header").offsetHeight-60;mini.classList.toggle("on",passou);mini.inert=!passou;
+    if(!calmo){
+      if(y<h){top.style.transform=`translate3d(0,${y*.28}px,0)`;top.style.opacity=String(Math.max(0,1-y/(h*.55)))}
+      const r=faixa.getBoundingClientRect();
+      if(r.bottom>0&&r.top<h)trilho.style.transform=`translate3d(${-((y*.45)%(trilho.scrollWidth/2))}px,0,0)`;
+    }};
+  addEventListener("scroll",()=>{if(!pedido){pedido=true;requestAnimationFrame(quadro)}},{passive:true});quadro();
+  b.onclick=()=>scrollTo({top:0,behavior:calmo?"auto":"smooth"})}
+// faixa com os nomes dos carrinhos da coleção (texto real, não decoração inventada)
+function montarFaixa(){const nomes=[...new Set(cars.map(c=>c.nome.replace(/\(.*?\)|—.*$|\+.*$|–.*$/g,"").replace(/\s+/g," ").trim().split(" ").slice(0,3).join(" ")))].filter(Boolean).slice(0,14);
+  const um=nomes.map((n,i)=>`<span class="${i%3===1?"cheio":""}">${esc(n)}</span>`).join("<i></i>");
+  $("trilho").innerHTML=um+"<i></i>"+um+"<i></i>"}
 
 /* ---------- init ---------- */
 for(const m of MARCAS)$("fMarca").add(new Option(m,m));
 for(const t of TIPOS){$("fTipo").add(new Option(t,t));$("fTipoM").add(new Option(t,t))}
 aplicarModo();
-carregar().then(render).catch(e=>{$("lista").innerHTML=`<div class="empty"><b>Não consegui carregar a lista</b>Verifique a internet e recarregue a página. (${esc(e.message)})</div>`});
+for(const a of document.querySelectorAll(".saule-link"))a.href=$("saule").href;
+carregar().then(()=>{render();montarFaixa()}).catch(e=>{$("lista").innerHTML=`<div class="empty"><b>Não consegui carregar a lista</b>Verifique a internet e recarregue a página. (${esc(e.message)})</div>`});
 </script>
 </body>
 </html>

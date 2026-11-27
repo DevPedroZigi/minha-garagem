@@ -701,7 +701,9 @@ async function iniciar() {
       carro.grupo.rotation.y = Math.cos(t * 0.45) * 0.015;
     }
     const bal = reduzido ? 0 : 1;
-    cam.set(base.x + (mouse.x * 0.7 + Math.sin(t * 0.3) * 0.15) * bal, base.y - mouse.y * 0.25 * bal, base.z + Math.cos(t * 0.23) * 0.12 * bal);
+    // ao rolar a página a câmera sobe e recua: o carro "fica para trás" enquanto o topo sai da tela
+    const rol = reduzido ? 0 : Math.min(scrollY / Math.max(canvas.clientHeight, 1), 1);
+    cam.set(base.x + (mouse.x * 0.7 + Math.sin(t * 0.3) * 0.15) * bal - rol * 1.2, base.y - mouse.y * 0.25 * bal + rol * 1.1, base.z + Math.cos(t * 0.23) * 0.12 * bal + rol * 2.4);
     camera.position.lerp(cam, 0.08);
     camera.lookAt(alvo);
     if (leve) renderer.render(cena, camera); else composer.render(); // modo leve: sem brilho (bloom)
