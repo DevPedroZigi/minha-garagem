@@ -564,7 +564,9 @@ async function iniciar() {
     renderer.setSize(w, h, false); composer.setSize(w, h);
     camera.aspect = w / h;
     if (camera.aspect > 1.6) { base.set(3.7, 1.45, 5.3); alvo.set(-1.45 * Math.min(camera.aspect / 3, 1.25), 0.62, 0.1); camera.fov = 30; }
-    else { base.set(5.9, 1.6, 8.2); alvo.set(0.55, 0.7, 0); camera.fov = 31; }
+    // celular: o topo é alto e os quadros de contagem ocupam a parte de cima,
+    // então a câmera mira mais alto (carro desce para a faixa livre) e recua um pouco (cabe inteiro)
+    else { base.set(6.6, 1.8, 9.2); alvo.set(0.45, 2.0, 0); camera.fov = 31; }
     cena.fog.near = base.length() + 1.5; cena.fog.far = cena.fog.near + 22; // névoa começa depois do carro
     camera.updateProjectionMatrix();
   }

@@ -112,6 +112,13 @@
   .lock{background:none;border:1px solid var(--line);border-radius:12px;width:44px;cursor:pointer;font-size:18px;opacity:.55}
   .lock:hover{opacity:1;border-color:var(--accent)}
   body.dono .lock{opacity:1;border-color:var(--accent)}
+  .topo{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:calc(18px + env(safe-area-inset-bottom));z-index:19;width:52px;height:52px;border-radius:50%;
+    border:0;cursor:pointer;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 26px -8px var(--accent-glow),0 0 0 1px #ff2b4f55;opacity:0;transform:translateY(14px) scale(.9);pointer-events:none;transition:opacity .2s,transform .2s,background .2s}
+  .topo.on{opacity:1;transform:none;pointer-events:auto}
+  .topo:hover{background:var(--accent2)}
+  .topo svg{width:22px;height:22px}
+  @media (max-width:640px){.topo{bottom:calc(84px + env(safe-area-inset-bottom))}}
   .btn:disabled{opacity:.6;cursor:wait}
   .btn.prio{background:linear-gradient(135deg,#E4002B,#a8001f);box-shadow:0 0 0 1px #ff2b4f55,0 8px 22px -10px var(--accent-glow)}
   .btn.prio:hover{background:linear-gradient(135deg,#FF2B4F,#c4002a)}
@@ -147,7 +154,7 @@
   <canvas id="cena3d" aria-label="Carro de F1 Red Bull andando na pista"></canvas>
 </header>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script type="module" src="carro3d.js?v=7"></script>
+<script type="module" src="carro3d.js?v=8"></script>
 
 <main>
   <div class="bar">
@@ -213,6 +220,7 @@
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<button class="topo" id="topo" aria-label="Voltar ao topo" title="Voltar ao topo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <script>
 const REPO="DevPedroZigi/minha-garagem", BRANCH="main", API=`https://api.github.com/repos/${REPO}/contents/`;
@@ -396,6 +404,11 @@ $("exp").onclick=()=>{const a=document.createElement("a");
   a.download=`garagem-backup-${new Date().toISOString().slice(0,10)}.json`;a.click()};
 
 function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2200)}
+
+/* ---------- voltar ao topo ---------- */
+{const b=$("topo"),ver=()=>b.classList.toggle("on",scrollY>innerHeight*.6);
+  addEventListener("scroll",ver,{passive:true});ver();
+  b.onclick=()=>scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
 
 /* ---------- init ---------- */
 for(const m of MARCAS)$("fMarca").add(new Option(m,m));
