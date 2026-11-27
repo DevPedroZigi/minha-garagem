@@ -390,9 +390,9 @@ function criarPista() {
 
 /* ---------------- cena ---------------- */
 // Modelo real (glTF). Ajuste: GIRO = rotação em Y para o bico apontar para +X.
-const MODELO = "modelos/rb19.glb?v=5";
+const MODELO = "modelos/bmw-m4-gt3.glb?v=2";
 const GIRO = 0;
-const COMPRIMENTO = 5.4; // m (escala da cena)
+const COMPRIMENTO = 4.6; // m (escala da cena)
 
 // O RB19 vem numa malha só: recorta os triângulos de cada roda (pelo eixo) e
 // cria um pivô para girar. Medidas no espaço do modelo (Y para cima, bico em +Z, eixo em X).
@@ -476,7 +476,11 @@ async function carregarModelo(url) {
   const gltf = await loader.loadAsync(url);
   const modelo = gltf.scene;
   modelo.updateMatrixWorld(true);
-  const rodas = separarRodas(modelo);
+  // BMW M4 GT3: as rodas já vêm separadas (nós WHEEL_*), é só girar cada pivô no eixo X
+  const rodas = [];
+  modelo.traverse(o => { if (/^WHEEL_(RF|LF|RR|LR)$/.test(o.name)) rodas.push({ giro: o, raio: 0.35, eixo: "x", sinal: 1 }); });
+  // pintura preta com verniz: brilho de carro de corrida
+  modelo.traverse(o => { if (!o.isMesh) return; for (const m of [].concat(o.material)) if (/car_paint/i.test(m.name)) { m.color.setRGB(0.012, 0.012, 0.014); m.metalness = 0.6; m.roughness = 0.28; } });
   modelo.rotation.y = GIRO;
   modelo.updateMatrixWorld(true);
 
@@ -560,7 +564,7 @@ async function iniciar() {
     renderer.setSize(w, h, false); composer.setSize(w, h);
     camera.aspect = w / h;
     if (camera.aspect > 1.6) { base.set(3.7, 1.45, 5.3); alvo.set(-1.45 * Math.min(camera.aspect / 3, 1.25), 0.62, 0.1); camera.fov = 30; }
-    else { base.set(5.9, 1.6, 8.2); alvo.set(0.15, 0.7, 0); camera.fov = 31; }
+    else { base.set(5.9, 1.6, 8.2); alvo.set(0.55, 0.7, 0); camera.fov = 31; }
     cena.fog.near = base.length() + 1.5; cena.fog.far = cena.fog.near + 22; // névoa começa depois do carro
     camera.updateProjectionMatrix();
   }
