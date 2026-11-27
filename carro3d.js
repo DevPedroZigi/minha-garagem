@@ -1,6 +1,5 @@
-// Cena 3D do topo: F1 nas cores Red Bull numa pista noturna.
-// Carroceria feita por "loft" (seções transversais interpoladas, como em CAD) e pintura via textura.
-// Tudo procedural (sem modelo baixado). Cores centralizadas em COR.
+// Cena 3D do topo: BMW M4 GT3 EVO preto (modelo real glTF) numa pista noturna, faróis vermelhos ("red eyes").
+// O F1 procedural (criarCarro) ficou só como reserva caso o modelo não carregue.
 import * as THREE from "three";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
@@ -310,7 +309,7 @@ function criarPista() {
     g.fillStyle = gr; g.fillRect(0, 0, w, h);
   }, true);
   asfalto.repeat.set(COMP / 6, 1.5);
-  const chao = new THREE.Mesh(new THREE.PlaneGeometry(COMP, 9), new THREE.MeshStandardMaterial({ map: asfalto, roughness: 0.82, metalness: 0.05, envMapIntensity: 0.25 }));
+  const chao = new THREE.Mesh(new THREE.PlaneGeometry(COMP, 9), new THREE.MeshStandardMaterial({ map: asfalto, roughness: 0.62, metalness: 0.12, envMapIntensity: 0.35 }));
   chao.rotation.x = -Math.PI / 2; chao.receiveShadow = true; grupo.add(chao);
   moveis.push({ tx: asfalto, passo: 6 });
 
@@ -465,6 +464,82 @@ function compactar(g, lista) {
   return out;
 }
 
+// "Red eyes": a malha de luzes do BMW junta faróis e lanternas. Separa os triângulos da frente
+// (z > 0 no espaço do modelo, antes de girar/escalar) numa malha própria com emissivo vermelho forte
+// (o bloom faz o brilho). Devolve o centro de cada farol (esquerdo/direito) no espaço do modelo.
+const VERMELHO_OLHO = new THREE.Color(1, 0.02, 0.06);
+function olhosVermelhos(modelo) {
+  const centros = [];
+  modelo.updateMatrixWorld(true);
+  const v = new THREE.Vector3();
+  modelo.traverse(o => {
+    if (!o.isMesh || !/Lights/i.test([].concat(o.material)[0]?.name || "")) return;
+    const g = o.geometry, pos = g.attributes.position, a = g.index?.array;
+    if (!a) return;
+    const z = new Float32Array(pos.count), x = new Float32Array(pos.count), y = new Float32Array(pos.count);
+    for (let i = 0; i < pos.count; i++) { v.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld); x[i] = v.x; y[i] = v.y; z[i] = v.z; }
+    const frente = [], resto = [];
+    for (let t = 0; t < a.length; t += 3) {
+      const cz = (z[a[t]] + z[a[t + 1]] + z[a[t + 2]]) / 3;
+      (cz > 0.5 ? frente : resto).push(a[t], a[t + 1], a[t + 2]);
+    }
+    if (!frente.length) return;
+    g.setIndex(resto);
+    o.material.emissive = new THREE.Color(1, 0.04, 0.08); o.material.emissiveIntensity = 1.6; // lanternas traseiras vermelhas
+    const mat = o.material.clone();
+    mat.emissive = VERMELHO_OLHO.clone(); mat.emissiveIntensity = 9;
+    mat.color = new THREE.Color(0.35, 0, 0.02);
+    const m = new THREE.Mesh(compactar(g, frente), mat);
+    m.position.copy(o.position); m.quaternion.copy(o.quaternion); m.scale.copy(o.scale);
+    o.parent.add(m);
+    for (const lado of [1, -1]) { // centro de cada farol: média dos vértices da frente daquele lado
+      const c = new THREE.Vector3(); let n = 0;
+      for (const i of new Set(frente)) if (x[i] * lado > 0.2) { c.x += x[i]; c.y += y[i]; c.z += z[i]; n++; }
+      if (n) centros.push(c.divideScalar(n));
+    }
+  });
+  return centros;
+}
+
+// brilho redondo (sprite) para o farol "acender" mesmo sem bloom (modo leve)
+function brilhoOlho() {
+  const tx = texturaCanvas(128, 128, (g, w) => {
+    const gr = g.createRadialGradient(w / 2, w / 2, 0, w / 2, w / 2, w / 2);
+    gr.addColorStop(0, "rgba(255,210,215,1)"); gr.addColorStop(0.12, "rgba(255,40,70,.9)");
+    gr.addColorStop(0.4, "rgba(228,0,43,.25)"); gr.addColorStop(1, "rgba(228,0,43,0)");
+    g.fillStyle = gr; g.fillRect(0, 0, w, w);
+  });
+  return new THREE.SpriteMaterial({ map: tx, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, toneMapped: false });
+}
+
+// feixe de luz do farol: cone aberto, transparente, mais forte na saída
+function feixe() {
+  const tx = texturaCanvas(8, 256, (g, w, h) => {
+    const gr = g.createLinearGradient(0, 0, 0, h);
+    gr.addColorStop(0, "rgba(255,30,60,0)"); gr.addColorStop(1, "rgba(255,30,60,1)");
+    g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  });
+  const geo = new THREE.ConeGeometry(0.95, 5.5, 32, 1, true);
+  geo.translate(0, -2.75, 0); geo.rotateZ(Math.PI / 2); // ponta no farol, abre para +X
+  return new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: tx, color: new THREE.Color(1, 0.1, 0.2), transparent: true, opacity: 0.16,
+    blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, toneMapped: false }));
+}
+
+// ambiente de estúdio para reflexos: caixa escura com faixas de luz (a lataria preta reflete as faixas)
+function ambienteEstudio() {
+  const s = new THREE.Scene();
+  s.add(new THREE.Mesh(new THREE.BoxGeometry(40, 16, 40), new THREE.MeshBasicMaterial({ color: 0x03040b, side: THREE.BackSide })));
+  const faixa = (w, h, cor, x, y, z, rx = 0, ry = 0) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: cor, side: THREE.DoubleSide }));
+    m.position.set(x, y, z); m.rotation.set(rx, ry, 0); s.add(m);
+  };
+  for (const z of [-3.2, 0, 3.2]) faixa(26, 1.4, new THREE.Color(1.1, 1.1, 1.25), 0, 7.5, z, Math.PI / 2); // refletores do teto
+  faixa(24, 3, new THREE.Color(0.25, 0.45, 1.6), 0, 2.5, -19);      // parede azul atrás
+  faixa(4, 8, new THREE.Color(1.8, 0.05, 0.2), -19, 3, 0, 0, Math.PI / 2); // faixa vermelha lateral
+  faixa(4, 8, new THREE.Color(0.7, 0.7, 0.8), 19, 3, 4, 0, Math.PI / 2);
+  return s;
+}
+
 async function carregarModelo(url) {
   const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
   const { MeshoptDecoder } = await import("three/addons/libs/meshopt_decoder.module.js");
@@ -479,8 +554,15 @@ async function carregarModelo(url) {
   // BMW M4 GT3: as rodas já vêm separadas (nós WHEEL_*), é só girar cada pivô no eixo X
   const rodas = [];
   modelo.traverse(o => { if (/^WHEEL_(RF|LF|RR|LR)$/.test(o.name)) rodas.push({ giro: o, raio: 0.35, eixo: "x", sinal: 1 }); });
-  // pintura preta com verniz: brilho de carro de corrida
-  modelo.traverse(o => { if (!o.isMesh) return; for (const m of [].concat(o.material)) if (/car_paint/i.test(m.name)) { m.color.setRGB(0.012, 0.012, 0.014); m.metalness = 0.6; m.roughness = 0.28; } });
+  // pintura preta metálica com verniz (clearcoat): reflete as faixas de luz do estúdio
+  modelo.traverse(o => {
+    if (!o.isMesh || !/car_paint/i.test(o.material?.name || "")) return;
+    const old = o.material;
+    o.material = new THREE.MeshPhysicalMaterial({ name: old.name, color: new THREE.Color(0.006, 0.0065, 0.009), metalness: 0.25, roughness: 0.5,
+      clearcoat: 1, clearcoatRoughness: 0.1, normalMap: old.normalMap || null, envMapIntensity: 0.8 });
+    old.dispose();
+  });
+  const faroisModelo = olhosVermelhos(modelo);
   modelo.rotation.y = GIRO;
   modelo.updateMatrixWorld(true);
 
@@ -499,10 +581,22 @@ async function carregarModelo(url) {
     if (!o.isMesh) return;
     o.castShadow = false; o.receiveShadow = true; // sombra do carro = mancha de contato (bem mais leve)
     const mats = Array.isArray(o.material) ? o.material : [o.material];
-    for (const m of mats) if (m && "envMapIntensity" in m) m.envMapIntensity = 1;
+    for (const m of mats) if (m && "envMapIntensity" in m && !m.isMeshPhysicalMaterial) m.envMapIntensity = 1;
   });
 
   const corpo = new THREE.Group(); corpo.add(modelo);
+  // faróis vermelhos: brilho + feixe + luz projetada na pista, presos à carroceria (balançam junto)
+  modelo.updateMatrixWorld(true);
+  const farois = faroisModelo.map(p => p.clone().applyMatrix4(modelo.matrixWorld));
+  const matBrilho = brilhoOlho();
+  for (const p of farois) {
+    const s = new THREE.Sprite(matBrilho); s.scale.setScalar(0.55); s.position.copy(p).add(new THREE.Vector3(0.06, 0, 0)); corpo.add(s);
+    const f = feixe(); f.position.copy(p).add(new THREE.Vector3(0.05, 0, 0)); f.rotation.z = -0.09; corpo.add(f);
+    const luz = new THREE.SpotLight(0xff1033, 45, 16, 0.42, 0.7, 1.4);
+    luz.position.copy(p).add(new THREE.Vector3(0.45, -0.05, 0));
+    luz.target.position.set(p.x + 5, 0, p.z * 1.4);
+    corpo.add(luz, luz.target);
+  }
   const grupo = new THREE.Group(); grupo.add(corpo);
   // sombra de contato
   const sombra = new THREE.Mesh(new THREE.PlaneGeometry(COMPRIMENTO * 1.05, 2.3),
@@ -532,8 +626,8 @@ async function iniciar() {
   cena.background = new THREE.Color(COR.fundo);
   cena.fog = new THREE.Fog(COR.fundo, 9, 32);
   const pmrem = new THREE.PMREMGenerator(renderer);
-  cena.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
-  cena.environmentIntensity = 0.38;
+  cena.environment = pmrem.fromScene(ambienteEstudio(), 0.02).texture;
+  cena.environmentIntensity = 0.5;
 
   const camera = new THREE.PerspectiveCamera(30, 2, 0.1, 120);
 
