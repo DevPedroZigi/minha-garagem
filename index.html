@@ -56,8 +56,8 @@
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;
         transition:transform .15s,border-color .15s,box-shadow .15s;display:flex;flex-direction:column}
   .card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 10px 30px -10px var(--accent-glow)}
-  .ph{aspect-ratio:4/3;background:radial-gradient(ellipse at 50% 40%,#1a2656,#090e26 75%);display:flex;align-items:center;justify-content:center;position:relative}
-  .ph img{width:100%;height:100%;object-fit:contain;padding:10px;filter:drop-shadow(0 10px 10px rgba(0,0,0,.6))}
+  .ph{aspect-ratio:4/5;background:#fff;display:flex;align-items:center;justify-content:center;position:relative}
+  .ph img{width:100%;height:100%;object-fit:cover;display:block}
   .ph .none{color:#444;font-size:44px}
   .ph::after{content:"";position:absolute;left:12%;right:12%;bottom:8px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.55}
   .info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
@@ -65,6 +65,10 @@
   .meta{color:var(--mut);font-size:13px}
   .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
   .tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:6px;background:#1a2450;color:#c9d0ea}
+  .tag.marca{background:#fff;color:#0b1130}
+  .tag.marca.mgt{background:#111;color:#fff;border:1px solid #444}
+  .tag.marca.mbx{background:#f26a21;color:#fff}
+  .tag.marca.mcd{background:#ffc72c;color:#c8102e}
   .tag.th{background:#33363a;color:var(--silver)}
   .tag.sth{background:linear-gradient(90deg,#6b5310,#a37d12);color:#fff3c7}
   .tag.prem{background:#3a0a1c;color:var(--accent2)}
@@ -148,8 +152,8 @@
 <main>
   <div class="bar">
     <div class="tabs">
-      <button class="tab on" data-tab="tenho">Tenho<span class="n" id="nTenho">0</span></button>
-      <button class="tab" data-tab="quero">Quero<span class="n" id="nQuero">0</span></button>
+      <button class="tab" data-tab="tenho">Tenho<span class="n" id="nTenho">0</span></button>
+      <button class="tab on" data-tab="quero">Quero<span class="n" id="nQuero">0</span></button>
     </div>
     <input class="search" id="q" placeholder="Buscar por nome, série ou ano...">
     <select class="search" id="fTipo"><option value="">Todos os tipos</option></select>
@@ -189,6 +193,10 @@
           <div><label>Ano</label><input class="fld" id="fAno" inputmode="numeric" placeholder="2024"></div>
           <div><label>Tipo</label><select class="fld" id="fTipoM"></select></div>
         </div>
+        <div class="row2">
+          <div><label>Marca</label><select class="fld" id="fMarca"></select></div>
+          <div></div>
+        </div>
         <div><label>Série</label><input class="fld" id="fSerie" placeholder="Ex: HW J-Imports"></div>
         <div class="row2">
           <div><label id="lPreco">Preço pago</label><input class="fld" id="fPreco" placeholder="R$ 0,00"></div>
@@ -208,9 +216,10 @@
 
 <script>
 const REPO="DevPedroZigi/minha-garagem", BRANCH="main", API=`https://api.github.com/repos/${REPO}/contents/`;
+const MARCAS=["Hot Wheels","Mini GT","Matchbox","McDonald's","Outra"];
 const TIPOS=["Mainline","Premium","Treasure Hunt","Super Treasure Hunt","Car Culture","RLC","Outro"];
 const $=id=>document.getElementById(id);
-let cars=[], sha=null, tab="tenho", editing=null, foto="", status="tenho";
+let cars=[], sha=null, tab="quero", editing=null, foto="", status="tenho";
 let token=null; try{token=localStorage.getItem("garagemToken")}catch{}
 // "R$ 1.075,50" -> 1075.5 ; usa o preço médio, ou o preço anotado se não tiver média
 function valor(c){const s=String(c.media||c.preco||"").replace(/[^\d,.]/g,"").replace(/\./g,"").replace(",",".");
@@ -264,6 +273,7 @@ $("lock").onclick=async()=>{
 /* ---------- render ---------- */
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function tagCls(t){return t==="Super Treasure Hunt"?"sth":t==="Treasure Hunt"?"th":(t==="Premium"||t==="Car Culture"||t==="RLC")?"prem":""}
+function marcaCls(m){return m==="Mini GT"?"mgt":m==="Matchbox"?"mbx":m==="McDonald's"?"mcd":""}
 function render(){
   const q=$("q").value.trim().toLowerCase(), ft=$("fTipo").value;
   const tenho=cars.filter(c=>c.status==="tenho").length, quero=cars.length-tenho;
@@ -298,6 +308,7 @@ function cardHTML(c,rank){return `
         ${(c.ano||c.serie)?`<div class="meta">${esc([c.ano,c.serie].filter(Boolean).join(" · "))}</div>`:""}
         ${c.obs?`<div class="meta">${esc(c.obs)}</div>`:""}
         <div class="tags">
+          <span class="tag marca ${marcaCls(c.marca)}">${esc(c.marca||"Hot Wheels")}</span>
           ${c.tipo?`<span class="tag ${tagCls(c.tipo)}">${esc(c.tipo)}</span>`:""}
           ${c.preco?`<span class="tag price own">${esc(c.preco)}</span>`:""}
           ${c.media?`<span class="tag avg" title="Preço médio pesquisado">≈ ${esc(c.media)}</span>`:""}
@@ -314,7 +325,7 @@ function openModal(c){
   editing=c||null;
   $("mTitle").textContent=c?"Editar carrinho":"Novo carrinho";
   $("fNome").value=c?.nome||"";$("fAno").value=c?.ano||"";$("fSerie").value=c?.serie||"";
-  $("fTipoM").value=c?.tipo||"Mainline";$("fPreco").value=c?.preco||"";$("fMedia").value=c?.media||"";$("fObs").value=c?.obs||"";$("fPrio").value=c?.prioridade||"";
+  $("fTipoM").value=c?.tipo||"Mainline";$("fMarca").value=c?.marca||"Hot Wheels";$("fPreco").value=c?.preco||"";$("fMedia").value=c?.media||"";$("fObs").value=c?.obs||"";$("fPrio").value=c?.prioridade||"";
   const f=c?.foto||"";setFoto(f);$("fUrl").value=/^https?:/.test(f)?f:"";
   setStatus(c?.status||tab);$("del").style.visibility=c?"visible":"hidden";
   $("ov").classList.add("on");setTimeout(()=>$("fNome").focus(),50);
@@ -348,7 +359,7 @@ $("save").onclick=()=>ocupado($("save"),async()=>{
   const id=editing?.id||(nome.toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+Date.now().toString(36));
   let f=foto;if(f.startsWith("data:"))f=await subirFoto(id,f);
   const c={...(editing||{id,criado:Date.now()}),nome,status,foto:f,ano:$("fAno").value.trim(),serie:$("fSerie").value.trim(),
-    tipo:$("fTipoM").value,preco:$("fPreco").value.trim(),media:$("fMedia").value.trim(),obs:$("fObs").value.trim()};
+    tipo:$("fTipoM").value,marca:$("fMarca").value,preco:$("fPreco").value.trim(),media:$("fMedia").value.trim(),obs:$("fObs").value.trim()};
   const np=parseInt($("fPrio").value,10);
   const i=cars.findIndex(x=>x.id===c.id);if(i>=0)cars[i]=c;else cars.push(c);
   if(status==="quero"&&np>0){ // entra na posição pedida e empurra os outros
@@ -387,10 +398,10 @@ $("exp").onclick=()=>{const a=document.createElement("a");
 function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2200)}
 
 /* ---------- init ---------- */
+for(const m of MARCAS)$("fMarca").add(new Option(m,m));
 for(const t of TIPOS){$("fTipo").add(new Option(t,t));$("fTipoM").add(new Option(t,t))}
 aplicarModo();
 carregar().then(()=>{ // abre na aba que tem carrinhos
-  if(!cars.some(c=>c.status==="tenho")){tab="quero";document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.tab==="quero"))}
   render()}).catch(e=>{$("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>Não consegui carregar a lista</b>${esc(e.message)}</div>`});
 </script>
 <p style="text-align:center;font-size:11px;color:var(--mut);opacity:.7;padding:28px 16px 36px">Modelo 3D: <a href="https://sketchfab.com/3d-models/oracle-red-bull-f1-car-rb19-2023-e4afe46f3aab4b23a418da06fc163821" target="_blank" rel="noopener" style="color:inherit">Oracle Red Bull F1 Car RB19 2023</a> por Redgrund · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:inherit">CC BY 4.0</a></p>
