@@ -45,7 +45,8 @@
   "obs": "Pintura AO Racing Rexy · OLX R$ 650–700",
   "media": "R$ 675",
   "foto": "fotos/card-porsche.jpg",
-  "criado": 1795502421259
+  "criado": 1795502421259,
+  "prioridade": 1
  },
  {
   "id": "bmw-m3-gtr",
@@ -69,7 +70,8 @@
   "media": "R$ 1.000",
   "foto": "fotos/web-godzilla.jpg",
   "criado": 1795502421261,
-  "obs": "Esgotado nas lojas (lançou ~R$ 300); revenda R$ 970–1.075"
+  "obs": "Esgotado nas lojas (lançou ~R$ 300); revenda R$ 970–1.075",
+  "prioridade": 4
  },
  {
   "id": "350z-fast-furious",
@@ -116,7 +118,8 @@
   "foto": "fotos/card-laranja.jpg",
   "criado": 1795502421265,
   "ano": "2023",
-  "obs": "OLX/ML R$ 200–250"
+  "obs": "OLX/ML R$ 200–250",
+  "prioridade": 3
  },
  {
   "id": "skyline-r34-brian-fast-furious",
@@ -127,7 +130,8 @@
   "obs": "Prata com faixas azuis · OLX R$ 450–550",
   "media": "R$ 450",
   "foto": "fotos/card-brian.jpg",
-  "criado": 1795502421266
+  "criado": 1795502421266,
+  "prioridade": 2
  },
  {
   "tipo": "Premium",
