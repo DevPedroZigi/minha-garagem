@@ -531,5 +531,83 @@
   "media": "R$ 25",
   "obs": "Matchbox · foto sua · estimativa",
   "foto": "fotos/card-matchbox-bmw-1m.jpg"
+ },
+ {
+  "tipo": "Outro",
+  "status": "quero",
+  "criado": 1795744370907,
+  "id": "minigt-1143-rexy-skeleton",
+  "nome": "Porsche 911 GT3 R #77 Skeleton Rexy (Mini GT)",
+  "ano": "2025",
+  "serie": "Mini GT #1143 · AO Racing IMSA Petit Le Mans",
+  "preco": "",
+  "media": "R$ 250",
+  "obs": "Mini GT 1:64 · OLX R$ 210–300",
+  "foto": "fotos/card-minigt-1143-rexy-skeleton.jpg"
+ },
+ {
+  "tipo": "Outro",
+  "status": "quero",
+  "criado": 1795744370983,
+  "id": "minigt-1052-rexy-rosa",
+  "nome": "Porsche 911 GT3 R #77 Rexy rosa (Mini GT)",
+  "ano": "2024",
+  "serie": "Mini GT #1052 · AO Racing IMSA Road America",
+  "preco": "",
+  "media": "R$ 400",
+  "obs": "Mini GT 1:64 · Rexy na OLX R$ 260–600 (não achei anúncio específico do rosa)",
+  "foto": "fotos/card-minigt-1052-rexy-rosa.jpg"
+ },
+ {
+  "tipo": "Outro",
+  "status": "quero",
+  "criado": 1795744371091,
+  "id": "minigt-848-nsx-red-bull",
+  "nome": "Honda NSX-GT #16 Red Bull Motul Mugen (Mini GT)",
+  "ano": "2022",
+  "serie": "Mini GT #848 · Super GT GT500",
+  "preco": "",
+  "media": "R$ 180",
+  "obs": "Mini GT 1:64 · OLX R$ 149–250",
+  "foto": "fotos/card-minigt-848-nsx-red-bull.jpg"
+ },
+ {
+  "tipo": "Outro",
+  "status": "quero",
+  "criado": 1795744371157,
+  "id": "minigt-462-bmw-m4-96",
+  "nome": "BMW M4 GT3 #96 Turner Motorsport Liqui Moly (Mini GT)",
+  "ano": "2022",
+  "serie": "Mini GT #462 · IMSA Daytona 24h",
+  "preco": "",
+  "media": "R$ 150",
+  "obs": "Mini GT 1:64 · estimativa, sem anúncios na OLX",
+  "foto": "fotos/card-minigt-462-bmw-m4-96.jpg"
+ },
+ {
+  "tipo": "Outro",
+  "status": "quero",
+  "criado": 1795744371247,
+  "id": "minigt-1215-bmw-m4-90",
+  "nome": "BMW M4 GT3 EVO #90 FIST Team AAI (Mini GT)",
+  "ano": "2025",
+  "serie": "Mini GT #1215 · China GT",
+  "preco": "",
+  "media": "R$ 150",
+  "obs": "Mini GT 1:64 · estimativa, sem anúncios na OLX",
+  "foto": "fotos/card-minigt-1215-bmw-m4-90.jpg"
+ },
+ {
+  "tipo": "Outro",
+  "status": "quero",
+  "criado": 1795744371333,
+  "id": "minigt-1430-bmw-m4-33",
+  "nome": "BMW M4 GT3 EVO #33 610 Racing (Mini GT)",
+  "ano": "2026",
+  "serie": "Mini GT #1430 · China GT Shanghai",
+  "preco": "",
+  "media": "R$ 150",
+  "obs": "Mini GT 1:64 · pré-venda, ainda sem foto da embalagem · estimativa",
+  "foto": "fotos/card-minigt-1430-bmw-m4-33.jpg"
  }
 ]
