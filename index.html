@@ -4,213 +4,299 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Garagem do Kyzam</title>
+<meta name="description" content="A coleção de miniaturas 1:64 do Kyzam: o que ele já tem e o que ele quer ganhar de presente.">
+<meta name="theme-color" content="#070B1F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Barlow:ital,wght@0,400;0,600;0,700;1,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,700;1,800&display=swap" rel="stylesheet">
 <style>
   :root{
     /* tema Red Bull Racing */
-    --bg:#070B1F; --bg2:#0D1430; --card:#101939; --line:#1F2B57; --campo:#080D22;
-    --txt:#F2F4FA; --mut:#8E97B8; --accent:#E4002B; --accent2:#FF2B4F; --yellow:#FFC906; --navy:#1B2559;
-    --accent-glow:rgba(228,0,43,.45);
+    --bg:#070B1F; --bg2:#0D1430; --card:#0F1736; --line:#1F2B57; --line2:#2C3A70; --campo:#080D22;
+    --txt:#F2F4FA; --mut:#9AA3C4; --accent:#E4002B; --accent-dk:#B80023; --yellow:#FFC906; --navy:#1B2559;
     --gold:#f5c542; --silver:#cfd6dd;
+    --sombra:0 14px 30px -18px rgba(0,0,0,.8);
+    --ease:cubic-bezier(.16,1,.3,1);
+    color-scheme:dark;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--txt);font-family:Barlow,system-ui,sans-serif}
+  html{scrollbar-color:var(--line2) var(--bg);-webkit-text-size-adjust:100%}
+  html,body{margin:0;background:var(--bg);color:var(--txt);font-family:Barlow,system-ui,sans-serif;font-size:16px;line-height:1.45}
+  ::selection{background:var(--accent);color:#fff}
   button,input,select,textarea{font:inherit;color:inherit}
+  button,a{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  :focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+  .sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .pular{position:absolute;left:12px;top:-60px;z-index:30;background:var(--yellow);color:#111;font-weight:700;padding:10px 14px;border-radius:10px;text-decoration:none}
+  .pular:focus{top:12px}
+  .ico{width:20px;height:20px;flex:none}
 
-  /* topo: cena 3D do carro */
-  header{position:relative;min-height:440px;padding:30px 24px;overflow:hidden;
-    background:radial-gradient(120% 90% at 75% 70%,#16245c 0%,var(--bg) 60%)}
+  /* ---------- topo: cena 3D ---------- */
+  header{position:relative;min-height:clamp(440px,66vh,640px);padding:28px 24px;overflow:hidden;
+    background:radial-gradient(120% 90% at 75% 70%,#16245c 0%,var(--bg) 60%);display:flex}
   #cena3d{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.2s ease}
   #cena3d.pronto{opacity:1}
   header::after{content:"";position:absolute;inset:0;pointer-events:none;
-    background:linear-gradient(90deg,rgba(7,11,31,.85) 0%,rgba(7,11,31,.35) 38%,transparent 60%),linear-gradient(0deg,var(--bg) 0%,transparent 22%)}
-  .top{position:relative;z-index:2}
-  .top{max-width:1240px;align-items:flex-start;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-  h1{margin:0;font-family:"Racing Sans One",Barlow,sans-serif;font-weight:400;font-style:italic;font-size:clamp(34px,6vw,56px);
-     letter-spacing:1px;line-height:1;background:linear-gradient(90deg,#ffffff 0%,#ffffff 30%,var(--yellow) 62%,var(--accent) 100%);
-     -webkit-background-clip:text;background-clip:text;color:transparent;transform:skewX(-6deg)}
-  .sub{color:var(--mut);margin-top:8px;font-size:15px;letter-spacing:.5px}
-  .sub .rb{color:var(--yellow);font-weight:700;font-style:italic;text-transform:uppercase}
-  .stats{display:flex;gap:10px}
-  .stat{background:rgba(13,20,48,.7);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;padding:10px 16px;text-align:center;min-width:92px}
-  .stat b{display:block;font-family:"Racing Sans One";font-weight:400;font-size:28px;color:var(--accent)}
-  .stat span{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:1px}
+    background:linear-gradient(90deg,rgba(7,11,31,.9) 0%,rgba(7,11,31,.55) 34%,transparent 58%),linear-gradient(0deg,var(--bg) 0%,transparent 26%)}
+  .top{position:relative;z-index:2;width:100%;max-width:1240px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 
-  main{max-width:1240px;margin:0 auto;padding:22px 24px 60px}
-  .bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:22px}
+  /* logo */
+  .logo{margin:0;display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1;font-weight:400}
+  .logo .pre{font-family:Barlow,sans-serif;font-weight:800;font-style:italic;font-size:clamp(14px,1.6vw,18px);letter-spacing:.02em;
+    background:var(--accent);color:#fff;padding:5px 12px 6px;transform:skewX(-12deg);margin-left:6px}
+  .logo .pre span{display:inline-block;transform:skewX(12deg)}
+  .logo .nome{font-family:"Racing Sans One",Barlow,sans-serif;font-style:italic;color:#fff;font-size:clamp(64px,10vw,120px);
+    letter-spacing:-.01em;margin-top:2px;text-shadow:0 6px 24px rgba(0,0,0,.45);position:relative;padding-bottom:14px}
+  .logo .nome::after{content:"";position:absolute;left:.08em;bottom:0;width:62%;height:7px;background:var(--yellow);transform:skewX(-30deg)}
+  .logo .nome::before{content:"";position:absolute;left:calc(.08em + 62% + 10px);bottom:0;width:14%;height:7px;background:var(--accent);transform:skewX(-30deg)}
+  .sub{color:#C6CCE2;margin-top:14px;font-size:16px;max-width:34ch}
+  .stats{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .stat{display:inline-flex;align-items:baseline;gap:7px;background:rgba(7,11,31,.72);border:1px solid var(--line2);border-radius:999px;padding:6px 14px 7px;font-size:14px;color:#C6CCE2}
+  .stat b{font-family:"Racing Sans One";font-weight:400;font-size:22px;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+  .lock{background:rgba(7,11,31,.72);border:1px solid var(--line2);border-radius:12px;width:44px;height:44px;cursor:pointer;color:var(--mut);display:flex;align-items:center;justify-content:center;transition:color .15s,border-color .15s}
+  .lock:hover{color:#fff;border-color:var(--mut)}
+  body.dono .lock{color:var(--yellow);border-color:var(--yellow)}
+  @media (prefers-reduced-motion:no-preference){
+    .logo .pre{animation:entra .7s var(--ease) both}
+    .logo .nome{animation:entra .9s .08s var(--ease) both}
+    .logo .nome::after,.logo .nome::before{animation:risca .8s .35s var(--ease) both;transform-origin:left}
+    .sub,.stats{animation:sobe .8s .25s var(--ease) both}
+  }
+  @keyframes entra{from{opacity:0;transform:translateX(-28px) skewX(-12deg)}}
+  @keyframes risca{from{transform:skewX(-30deg) scaleX(0)}}
+  @keyframes sobe{from{opacity:0;transform:translateY(8px)}}
+
+  /* ---------- presente ---------- */
+  main{max-width:1240px;margin:0 auto;padding:8px 24px 64px}
+  .presente{display:grid;grid-template-columns:1fr auto;gap:18px 28px;align-items:center;margin:0 0 28px;padding:22px 24px;
+    border:1px solid var(--line2);border-radius:16px;background:linear-gradient(100deg,#141d45 0%,var(--bg2) 70%)}
+  .presente h2{margin:0 0 6px;font-family:"Racing Sans One";font-weight:400;font-style:italic;font-size:clamp(24px,3vw,30px);line-height:1.1;color:#fff;text-wrap:balance}
+  .presente p{margin:0;color:#C6CCE2;max-width:62ch;text-wrap:pretty}
+  .presente p b{color:#fff}
+  body:not([data-tab="quero"]) .presente{display:none}
+
+  /* ---------- barra ---------- */
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
   .tabs{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:4px}
-  .tab{border:0;background:none;padding:9px 18px;border-radius:9px;cursor:pointer;font-weight:700;font-style:italic;text-transform:uppercase;letter-spacing:.5px;color:var(--mut)}
-  .tab.on{background:var(--accent);color:#fff}
-  .tab .n{opacity:.7;margin-left:6px;font-style:normal}
-  .search{flex:1;min-width:0;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:11px 14px;outline:none}
-  .search:focus,.fld:focus{border-color:var(--accent)}
-  select.search{flex:0 0 auto;min-width:170px}
-  .btn{border:0;border-radius:12px;padding:11px 18px;cursor:pointer;font-weight:700;background:var(--accent);color:#fff;text-transform:uppercase;font-style:italic;letter-spacing:.5px;white-space:nowrap}
-  .btn:hover{background:var(--accent2)}
-  .btn.ghost{background:var(--bg2);color:var(--txt);border:1px solid var(--line)}
-  .btn.ghost:hover{border-color:var(--accent)}
-  .btn.danger{background:transparent;color:#ff6b6b;border:1px solid #4a2222}
+  .tab{border:0;background:none;min-height:40px;padding:8px 18px;border-radius:9px;cursor:pointer;font-weight:700;font-style:italic;text-transform:uppercase;letter-spacing:.03em;color:var(--mut);transition:color .15s,background-color .15s}
+  .tab:hover{color:#fff}
+  .tab[aria-selected="true"]{background:var(--accent);color:#fff}
+  .tab .n{opacity:.75;margin-left:6px;font-style:normal;font-variant-numeric:tabular-nums}
+  .search{flex:1;min-width:0;min-height:46px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;outline:none;transition:border-color .15s}
+  .search::placeholder{color:#7F89AE}
+  .search:hover{border-color:var(--line2)}
+  .search:focus-visible,.fld:focus-visible{border-color:var(--yellow);outline:none;box-shadow:0 0 0 1px var(--yellow)}
+  select.search{flex:0 0 auto;min-width:180px;background-color:var(--bg2);color:var(--txt);cursor:pointer}
+  .btn{border:0;border-radius:12px;min-height:44px;padding:10px 18px;cursor:pointer;font-weight:700;background:var(--accent);color:#fff;text-transform:uppercase;font-style:italic;letter-spacing:.03em;white-space:nowrap;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;transition:background-color .15s,border-color .15s}
+  .btn:hover{background:var(--accent-dk)}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line2)}
+  .btn.ghost:hover{border-color:var(--mut);background:var(--bg2)}
+  .btn.danger{background:transparent;color:#ff8a8a;border:1px solid #5a2a2a}
+  .btn:disabled{opacity:.6;cursor:wait}
 
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;
-        transition:transform .15s,border-color .15s,box-shadow .15s;display:flex;flex-direction:column}
-  .card:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 10px 30px -10px var(--accent-glow)}
+  /* ---------- seções e cards ---------- */
+  .secao{margin-bottom:40px}
+  .secao-tit{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 16px}
+  .secao-tit h2{margin:0;font-family:"Racing Sans One";font-weight:400;font-style:italic;font-size:clamp(24px,3vw,32px);line-height:1.1}
+  .secao-tit p{margin:0;color:var(--mut);font-size:15px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;position:relative;transition:border-color .15s}
+  .prio .card{border-color:var(--line2)}
+  body.dono .card{cursor:pointer}
+  body.dono .card:hover{border-color:var(--mut)}
   .ph{aspect-ratio:4/5;background:#fff;display:flex;align-items:center;justify-content:center;position:relative}
   .ph img{width:100%;height:100%;object-fit:cover;display:block}
-  .ph .none{color:#444;font-size:44px}
-  .ph::after{content:"";position:absolute;left:12%;right:12%;bottom:8px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.55}
-  .info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1}
-  .name{font-weight:700;font-size:17px;line-height:1.2}
-  .meta{color:var(--mut);font-size:13px}
-  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
-  .tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:6px;background:#1a2450;color:#c9d0ea}
+  .ph .none{color:#5b6280;font-weight:700;font-size:14px}
+  .info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:5px;flex:1}
+  .name{margin:0;font-weight:700;font-size:17px;line-height:1.22;text-wrap:pretty;overflow-wrap:break-word}
+  .meta{color:var(--mut);font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+  .obs{color:var(--mut);font-size:13px;line-height:1.35;border-top:1px solid var(--line);padding-top:7px;margin-top:2px;overflow-wrap:anywhere}
+  .preco{display:flex;align-items:baseline;gap:6px;margin-top:4px}
+  .preco b{font-family:"Racing Sans One";font-weight:400;font-size:24px;color:var(--yellow);line-height:1;font-variant-numeric:tabular-nums}
+  .preco span{font-size:13px;color:var(--mut)}
+  .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:8px}
+  .tag{font-size:12px;font-weight:700;letter-spacing:.02em;padding:3px 8px;border-radius:6px;background:#1a2450;color:#d3d9ef}
   .tag.marca{background:#fff;color:#0b1130}
-  .tag.marca.mgt{background:#111;color:#fff;border:1px solid #444}
-  .tag.marca.mbx{background:#f26a21;color:#fff}
-  .tag.marca.mcd{background:#ffc72c;color:#c8102e}
+  .tag.marca.mgt{background:#111;color:#fff;box-shadow:inset 0 0 0 1px #555}
+  .tag.marca.mbx{background:#c94f0f;color:#fff}
+  .tag.marca.mcd{background:#ffc72c;color:#8d0b20}
   .tag.th{background:#33363a;color:var(--silver)}
-  .tag.sth{background:linear-gradient(90deg,#6b5310,#a37d12);color:#fff3c7}
-  .tag.prem{background:#3a0a1c;color:var(--accent2)}
-  .tag.price{background:transparent;border:1px solid var(--line);color:var(--mut)}
-  .tag.avg{background:transparent;border:1px solid #5a1530;color:var(--accent2)}
-  .got{margin-top:8px;border:1px dashed var(--accent);background:transparent;color:var(--accent);border-radius:10px;padding:7px;cursor:pointer;font-weight:700;font-style:italic;text-transform:uppercase}
-  .got:hover{background:var(--accent);color:#fff}
+  .tag.sth{background:#7a5c0c;color:#fff3c7}
+  .tag.prem{background:#3a0a1c;color:#ff8da1}
+  .tag.price{background:transparent;box-shadow:inset 0 0 0 1px var(--line2);color:#C6CCE2}
+  .acoes{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .acoes .btn{width:100%;font-size:14px;min-height:44px;padding:9px 12px}
+  .acoes .btn.got{background:transparent;color:var(--yellow);border:1px dashed var(--yellow)}
+  .acoes .btn.got:hover{background:var(--yellow);color:#111}
+  .rank{position:absolute;top:10px;left:10px;z-index:2;min-width:40px;height:40px;padding:0 9px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;
+    font-family:"Racing Sans One";font-size:21px;box-shadow:0 6px 14px -6px rgba(0,0,0,.7)}
+  .rank.r1{background:var(--yellow);color:#111}
+  .mv{position:absolute;top:10px;right:10px;z-index:2;display:flex;gap:6px}
+  .mv button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line2);background:rgba(11,17,48,.9);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .mv button:hover{background:var(--accent);border-color:var(--accent)}
+  .mv svg{width:18px;height:18px}
 
-  .empty{text-align:center;color:var(--mut);padding:70px 20px;border:1px dashed var(--line);border-radius:16px}
+  .empty{text-align:center;color:var(--mut);padding:64px 20px;border:1px dashed var(--line2);border-radius:16px}
   .empty b{display:block;font-family:"Racing Sans One";font-weight:400;font-size:26px;color:var(--txt);margin-bottom:6px}
 
-  /* modal */
-  .ov{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+  /* ---------- modal ---------- */
+  .ov{position:fixed;inset:0;background:rgba(3,5,15,.78);display:none;align-items:center;justify-content:center;padding:16px;z-index:10;overscroll-behavior:contain}
   .ov.on{display:flex}
-  .modal{background:var(--bg2);border:1px solid var(--line);border-radius:18px;width:min(720px,100%);max-height:94vh;overflow:auto;padding:22px}
-  .modal h2{margin:0 0 16px;font-family:"Racing Sans One";font-weight:400;font-style:italic;color:var(--accent);font-size:28px}
+  .modal{background:var(--bg2);border:1px solid var(--line2);border-radius:18px;width:min(720px,100%);max-height:94vh;overflow:auto;padding:22px;overscroll-behavior:contain}
+  .modal h2{margin:0 0 16px;font-family:"Racing Sans One";font-weight:400;font-style:italic;color:#fff;font-size:28px}
   .form{display:grid;grid-template-columns:260px 1fr;gap:18px}
-  @media (max-width:640px){.form{grid-template-columns:1fr}
-    .bar .tabs,.bar input.search,.bar .btn{flex:1 1 100%}.bar .tab{flex:1}.bar select.search{flex:1 1 40%;min-width:0}header{min-height:400px;padding:22px 16px}main{padding:18px 16px 50px}}
-  .drop{aspect-ratio:4/3;border:2px dashed var(--line);border-radius:14px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--mut);
-        cursor:pointer;background:var(--campo);overflow:hidden;font-size:14px;padding:10px}
-  .drop.hot{border-color:var(--accent);color:var(--accent)}
+  .drop{aspect-ratio:4/3;border:2px dashed var(--line2);border-radius:14px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--mut);
+        cursor:pointer;background:var(--campo);overflow:hidden;font-size:14px;padding:10px;width:100%}
+  .drop.hot{border-color:var(--yellow);color:var(--yellow)}
   .drop img{width:100%;height:100%;object-fit:contain}
   .col{display:flex;flex-direction:column;gap:10px}
-  label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--mut);font-weight:700}
-  .fld{width:100%;background:var(--campo);border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none;margin-top:4px}
-  textarea.fld{resize:vertical;min-height:64px}
+  label,.lbl{font-size:13px;letter-spacing:.02em;color:var(--mut);font-weight:700}
+  .fld{width:100%;background:var(--campo);border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none;margin-top:4px;min-height:44px}
+  .fld::placeholder{color:#6F79A0}
+  select.fld{background-color:var(--campo);color:var(--txt)}
+  textarea.fld{resize:vertical;min-height:72px}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .seg{display:flex;gap:6px;margin-top:4px}
-  .seg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--campo);cursor:pointer;font-weight:700}
-  .seg button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .seg button{flex:1;min-height:44px;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--campo);cursor:pointer;font-weight:700}
+  .seg button[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
   .acts{display:flex;gap:10px;justify-content:space-between;margin-top:18px;flex-wrap:wrap}
   .acts div{display:flex;gap:10px}
-  .hint{font-size:12px;color:var(--mut)}
-  .foot{display:flex;gap:10px;justify-content:center;margin-top:40px;flex-wrap:wrap}
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--accent);color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;transition:transform .25s;z-index:20}
+  .foot{display:flex;gap:10px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(90px);background:#fff;color:#0b1130;font-weight:700;padding:11px 18px;border-radius:10px;
+    box-shadow:0 12px 30px -12px rgba(0,0,0,.8);transition:transform .3s var(--ease);z-index:20}
   .toast.on{transform:translateX(-50%) translateY(0)}
   body:not(.dono) .own{display:none!important}
-  body:not(.dono) .card{cursor:default}
-  body:not(.dono) .card:hover{transform:none}
-  .lock{background:none;border:1px solid var(--line);border-radius:12px;width:44px;cursor:pointer;font-size:18px;opacity:.55}
-  .lock:hover{opacity:1;border-color:var(--accent)}
-  body.dono .lock{opacity:1;border-color:var(--accent)}
   .topo{position:fixed;right:max(18px,env(safe-area-inset-right));bottom:calc(18px + env(safe-area-inset-bottom));z-index:19;width:52px;height:52px;border-radius:50%;
-    border:0;cursor:pointer;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 10px 26px -8px var(--accent-glow),0 0 0 1px #ff2b4f55;opacity:0;transform:translateY(14px) scale(.9);pointer-events:none;transition:opacity .2s,transform .2s,background .2s}
+    border:1px solid var(--line2);cursor:pointer;background:var(--bg2);color:#fff;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 12px 24px -10px rgba(0,0,0,.8);opacity:0;transform:translateY(14px) scale(.9);pointer-events:none;transition:opacity .2s,transform .2s,background-color .2s}
   .topo.on{opacity:1;transform:none;pointer-events:auto}
-  .topo:hover{background:var(--accent2)}
+  .topo:hover{background:var(--accent);border-color:var(--accent)}
   .topo svg{width:22px;height:22px}
-  @media (max-width:640px){.topo{bottom:calc(84px + env(safe-area-inset-bottom))}}
-  .btn:disabled{opacity:.6;cursor:wait}
-  .btn.prio{background:linear-gradient(135deg,#E4002B,#a8001f);box-shadow:0 0 0 1px #ff2b4f55,0 8px 22px -10px var(--accent-glow)}
-  .btn.prio:hover{background:linear-gradient(135deg,#FF2B4F,#c4002a)}
-  .btn.prio.on{background:#fff;color:var(--accent);box-shadow:0 0 0 2px var(--accent),0 8px 26px -8px var(--accent-glow)}
-  body.vprio .tab.on{background:none;color:var(--mut)}
-  body.vprio #fOrdem{display:none}
-  .prioInfo{display:none;margin:-8px 0 20px;padding:14px 18px;border-radius:14px;border:1px solid #5a1530;
-    background:linear-gradient(90deg,#3a0a1c,transparent);color:var(--txt);font-size:14px}
-  .prioInfo b{color:var(--yellow);font-family:"Racing Sans One";font-weight:400;font-size:18px;letter-spacing:.5px}
-  body.vprio .prioInfo{display:block}
-  .rank{position:absolute;top:10px;left:10px;z-index:2;min-width:38px;height:38px;padding:0 8px;border-radius:10px;
-    display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;
-    font-family:"Racing Sans One";font-size:20px;box-shadow:0 6px 16px -6px var(--accent-glow)}
-  .rank.top{background:var(--yellow);color:#111}
-  .mv{position:absolute;top:10px;right:10px;z-index:2;display:flex;gap:6px}
-  .mv button{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:#0b1130cc;color:#fff;cursor:pointer;font-size:14px}
-  .mv button:hover{border-color:var(--accent);background:var(--accent)}
+  footer{max-width:1240px;margin:0 auto;padding:8px 24px 40px;text-align:center;font-size:13px;color:var(--mut)}
+  footer a{color:inherit;text-underline-offset:3px}
+  footer a:hover{color:#fff}
+
+  /* ---------- celular ---------- */
+  @media (max-width:640px){
+    header{min-height:480px;padding:20px 16px}
+    .logo .nome{font-size:68px;padding-bottom:11px}
+    .logo .nome::after,.logo .nome::before{height:6px}
+    .sub{font-size:15px;margin-top:10px}
+    .stats{margin-top:12px}
+    main{padding:4px 12px 56px}
+    .presente{grid-template-columns:1fr;padding:18px 16px;margin-bottom:22px}
+    .presente .btn{width:100%}
+    .bar{gap:8px;margin-bottom:22px}
+    .bar .tabs,.bar input.search{flex:1 1 100%}.bar .tab{flex:1}
+    .bar select.search{flex:1 1 40%;min-width:0;font-size:15px;padding:10px}
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .info{padding:10px 10px 12px;gap:4px}
+    .name{font-size:15px}
+    .meta{font-size:13px}
+    .preco b{font-size:21px}
+    .preco span{font-size:12px}
+    .tag{font-size:11px;padding:3px 6px}
+    .acoes .btn{font-size:13px;padding:8px 6px;letter-spacing:0}
+    .rank{min-width:34px;height:34px;font-size:18px;top:8px;left:8px}
+    .mv{top:8px;right:8px}.mv button{width:36px;height:36px}
+    .form{grid-template-columns:1fr}
+    .topo{bottom:calc(18px + env(safe-area-inset-bottom))}
+  }
 </style>
 </head>
-<body>
+<body data-tab="quero">
+<a class="pular" href="#conteudo">Pular para a lista</a>
 <header>
   <div class="top">
     <div>
-      <h1>Garagem do Kyzam</h1>
-      <div class="sub">Coleção de miniaturas 1:64 · <span class="rb">Racing</span></div>
+      <h1 class="logo" translate="no"><span class="pre"><span>Garagem do</span></span><span class="nome">Kyzam</span></h1>
+      <p class="sub">Minha coleção de miniaturas 1:64. O que eu já tenho e o que eu ainda quero.</p>
+      <div class="stats">
+        <span class="stat"><b id="sTenho">0</b>na garagem</span>
+        <span class="stat"><b id="sQuero">0</b>na mira</span>
+      </div>
     </div>
-    <div class="stats">
-      <div class="stat"><b id="sTenho">0</b><span>Na garagem</span></div>
-      <div class="stat"><b id="sQuero">0</b><span>Na mira</span></div>
-      <button class="lock" id="lock" title="Entrar no modo edição">🔒</button>
-    </div>
+    <button class="lock" id="lock" aria-label="Entrar no modo edição" title="Entrar no modo edição">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10" rx="2"/><path id="arco" d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+    </button>
   </div>
-  <canvas id="cena3d" aria-label="Carro de F1 Red Bull andando na pista"></canvas>
+  <canvas id="cena3d" role="img" aria-label="BMW M4 GT3 preto andando numa pista de corrida à noite"></canvas>
 </header>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
-<script type="module" src="carro3d.js?v=8"></script>
+<script type="module" src="carro3d.js?v=9"></script>
 
-<main>
-  <div class="bar">
-    <div class="tabs">
-      <button class="tab" data-tab="tenho">Tenho<span class="n" id="nTenho">0</span></button>
-      <button class="tab on" data-tab="quero">Quero<span class="n" id="nQuero">0</span></button>
+<main id="conteudo">
+  <section class="presente" aria-labelledby="tPresente">
+    <div>
+      <h2 id="tPresente">Quer me dar um carrinho de presente?</h2>
+      <p>Os primeiros da lista são os que eu mais quero. Escolha um e toque em <b>Pedir pro Saule</b>: é com ele que eu compro, e a mensagem já vai pronta no WhatsApp. Também dá para procurar no Mercado Livre.</p>
     </div>
-    <input class="search" id="q" placeholder="Buscar por nome, série ou ano...">
+    <a class="btn" id="saule" target="_blank" rel="noopener">
+      <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.5L3 21l2-5.4A8.5 8.5 0 1 1 21 11.5z"/></svg>
+      Falar com o Saule
+    </a>
+  </section>
+
+  <div class="bar">
+    <div class="tabs" role="tablist" aria-label="Lista">
+      <button class="tab" role="tab" data-tab="quero" aria-selected="true">Quero<span class="n" id="nQuero">0</span></button>
+      <button class="tab" role="tab" data-tab="tenho" aria-selected="false">Tenho<span class="n" id="nTenho">0</span></button>
+    </div>
+    <label class="sr" for="q">Buscar</label>
+    <input class="search" id="q" type="search" placeholder="Buscar por nome, série ou ano…" autocomplete="off" spellcheck="false">
+    <label class="sr" for="fTipo">Filtrar por tipo</label>
     <select class="search" id="fTipo"><option value="">Todos os tipos</option></select>
+    <label class="sr" for="fOrdem">Ordenar</label>
     <select class="search" id="fOrdem">
       <option value="barato" selected>Mais barato primeiro</option>
       <option value="caro">Mais caro primeiro</option>
-      <option value="nome">Ordem: nome (A–Z)</option>
+      <option value="nome">Nome (A–Z)</option>
     </select>
-    <button class="btn prio" id="prio" title="Os que eu mais quero, em ordem de preferência">🎁 Prioridades do Kyzam</button>
     <button class="btn own" id="add">+ Adicionar</button>
   </div>
-  <div class="prioInfo"><b>Em dúvida do que me dar de presente?</b><br>Esses são os carrinhos que eu mais quero, em ordem de preferência: o nº 1 é o que eu mais quero.</div>
-  <div class="grid" id="grid"></div>
+  <div id="lista" aria-live="polite"></div>
   <div class="foot own">
     <button class="btn ghost" id="exp">Salvar backup</button>
   </div>
 </main>
 
+<footer>Modelo 3D: <a href="https://sketchfab.com/3d-models/2025-bmw-m4-gt3-evo-g82-113f83dd87064697a5ec2511d280b9d5" target="_blank" rel="noopener">2025 BMW M4 GT3 EVO G82</a> por Ddiaz Design, <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> (adaptado: pintura e compressão)</footer>
+
 <div class="ov" id="ov">
-  <div class="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
     <h2 id="mTitle">Novo carrinho</h2>
     <div class="form">
       <div class="col">
-        <div class="drop" id="drop">Clique, arraste ou cole (Ctrl+V) uma foto</div>
+        <button type="button" class="drop" id="drop">Clique, arraste ou cole (Ctrl+V) uma foto</button>
         <input type="file" id="file" accept="image/*" hidden>
         <div>
-          <label>Ou link da imagem</label>
-          <input class="fld" id="fUrl" placeholder="https://...">
+          <label for="fUrl">Ou link da imagem</label>
+          <input class="fld" id="fUrl" type="url" placeholder="https://…" autocomplete="off">
         </div>
       </div>
       <div class="col">
-        <div><label>Nome *</label><input class="fld" id="fNome" placeholder="Ex: Nissan Skyline GT-R (R34)"></div>
-        <div><label>Status</label>
-          <div class="seg" id="fStatus"><button data-v="tenho">Tenho</button><button data-v="quero">Quero</button></div>
+        <div><label for="fNome">Nome *</label><input class="fld" id="fNome" placeholder="Ex: Nissan Skyline GT-R (R34)" autocomplete="off"></div>
+        <div><span class="lbl" id="lStatus">Status</span>
+          <div class="seg" id="fStatus" role="group" aria-labelledby="lStatus"><button type="button" data-v="tenho">Tenho</button><button type="button" data-v="quero">Quero</button></div>
         </div>
         <div class="row2">
-          <div><label>Ano</label><input class="fld" id="fAno" inputmode="numeric" placeholder="2024"></div>
-          <div><label>Tipo</label><select class="fld" id="fTipoM"></select></div>
+          <div><label for="fAno">Ano</label><input class="fld" id="fAno" inputmode="numeric" placeholder="2024" autocomplete="off"></div>
+          <div><label for="fTipoM">Tipo</label><select class="fld" id="fTipoM"></select></div>
         </div>
         <div class="row2">
-          <div><label>Marca</label><select class="fld" id="fMarca"></select></div>
+          <div><label for="fMarca">Marca</label><select class="fld" id="fMarca"></select></div>
           <div></div>
         </div>
-        <div><label>Série</label><input class="fld" id="fSerie" placeholder="Ex: HW J-Imports"></div>
+        <div><label for="fSerie">Série</label><input class="fld" id="fSerie" placeholder="Ex: HW J-Imports" autocomplete="off"></div>
         <div class="row2">
-          <div><label id="lPreco">Preço pago</label><input class="fld" id="fPreco" placeholder="R$ 0,00"></div>
-          <div><label>Preço médio</label><input class="fld" id="fMedia" placeholder="R$ 0,00"></div>
+          <div><label for="fPreco" id="lPreco">Preço pago</label><input class="fld" id="fPreco" placeholder="R$ 0,00" autocomplete="off"></div>
+          <div><label for="fMedia">Preço médio</label><input class="fld" id="fMedia" placeholder="R$ 0,00" autocomplete="off"></div>
         </div>
-        <div id="wPrio"><label>Prioridade (1 = o que mais quero · vazio = sem prioridade)</label><input class="fld" id="fPrio" inputmode="numeric" placeholder="Ex: 1"></div>
-        <div><label>Observação</label><textarea class="fld" id="fObs"></textarea></div>
+        <div id="wPrio"><label for="fPrio">Prioridade (1 = o que mais quero · vazio = sem prioridade)</label><input class="fld" id="fPrio" inputmode="numeric" placeholder="Ex: 1" autocomplete="off"></div>
+        <div><label for="fObs">Observação</label><textarea class="fld" id="fObs"></textarea></div>
       </div>
     </div>
     <div class="acts">
@@ -219,11 +305,12 @@
     </div>
   </div>
 </div>
-<div class="toast" id="toast"></div>
-<button class="topo" id="topo" aria-label="Voltar ao topo" title="Voltar ao topo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button class="topo" id="topo" aria-label="Voltar ao topo" title="Voltar ao topo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 
 <script>
 const REPO="DevPedroZigi/minha-garagem", BRANCH="main", API=`https://api.github.com/repos/${REPO}/contents/`;
+const SAULE="5545991151303"; // WhatsApp do Saule (é com ele que o Kyzam compra)
 const MARCAS=["Hot Wheels","Mini GT","Matchbox","McDonald's","Outra"];
 const TIPOS=["Mainline","Premium","Treasure Hunt","Super Treasure Hunt","Car Culture","RLC","Outro"];
 const $=id=>document.getElementById(id);
@@ -255,7 +342,7 @@ async function putFile(path,contentB64,msg,fileSha){
 async function salvarDados(msg){
   try{sha=await putFile("dados.json",b64(JSON.stringify(cars,null,1)),msg,sha)}
   catch(e){ // alguém (outra aba) salvou antes: recarrega e avisa
-    toast("Erro ao salvar: "+e.message);await carregar();render();throw e}
+    toast("Não salvou: "+e.message+". Recarreguei a lista, tente de novo.");await carregar();render();throw e}
 }
 async function subirFoto(id,dataUrl){
   const ext=dataUrl.slice(5,dataUrl.indexOf(";")).split("/")[1].replace("jpeg","jpg");
@@ -265,8 +352,9 @@ async function subirFoto(id,dataUrl){
 }
 
 /* ---------- modo dono ---------- */
-function aplicarModo(){document.body.classList.toggle("dono",!!token);$("lock").textContent=token?"🔓":"🔒";
-  $("lock").title=token?"Sair do modo edição":"Entrar no modo edição"}
+function aplicarModo(){document.body.classList.toggle("dono",!!token);
+  const t=token?"Sair do modo edição":"Entrar no modo edição";$("lock").setAttribute("aria-label",t);$("lock").title=t;
+  $("arco").setAttribute("d",token?"M8 10.5V7.5a4 4 0 0 1 7.7-1.5":"M8 10.5V7.5a4 4 0 0 1 8 0v3")}
 function sair(){token=null;sha=null;try{localStorage.removeItem("garagemToken")}catch{}aplicarModo()}
 $("lock").onclick=async()=>{
   if(token){if(confirm("Sair do modo edição neste navegador?")){sair();render()}return}
@@ -278,67 +366,85 @@ $("lock").onclick=async()=>{
   aplicarModo();await carregar();render();toast("Modo edição ativado");
 };
 
+/* ---------- comprar ---------- */
+const zap=txt=>`https://wa.me/${SAULE}?text=${encodeURIComponent(txt)}`;
+function msgSaule(c){const det=[c.serie,c.ano].filter(Boolean).join(", ");
+  return `Oi Saule! Quero comprar um carrinho de presente pro Kyzam: ${c.marca&&c.marca!=="Hot Wheels"?c.marca+" ":""}${c.nome}${det?` (${det})`:""}. Você tem ou consegue?`}
+function linkML(c){const t=`${c.marca||"Hot Wheels"} ${c.nome}`.replace(/—.*$|pré-venda/gi," ")
+  .toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  return `https://lista.mercadolivre.com.br/${t}`}
+$("saule").href=zap("Oi Saule! Quero comprar um carrinho de presente pro Kyzam. Pode me ajudar?");
+
 /* ---------- render ---------- */
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 function tagCls(t){return t==="Super Treasure Hunt"?"sth":t==="Treasure Hunt"?"th":(t==="Premium"||t==="Car Culture"||t==="RLC")?"prem":""}
 function marcaCls(m){return m==="Mini GT"?"mgt":m==="Matchbox"?"mbx":m==="McDonald's"?"mcd":""}
+function ordenar(l){const ord=$("fOrdem").value;
+  return l.sort((a,b)=>{if(ord!=="nome"){const pa=valor(a),pb=valor(b);
+    if(pa!==pb){if(pa===null)return 1;if(pb===null)return -1;return ord==="barato"?pa-pb:pb-pa}}
+    return a.nome.localeCompare(b.nome,"pt-BR")})}
+const secao=(tit,desc,itens,cls="")=>`<section class="secao ${cls}">${tit?`<div class="secao-tit"><h2>${tit}</h2>${desc?`<p>${desc}</p>`:""}</div>`:""}<div class="grid">${itens}</div></section>`;
 function render(){
   const q=$("q").value.trim().toLowerCase(), ft=$("fTipo").value;
+  const filtra=c=>(!ft||c.tipo===ft)&&(!q||[c.nome,c.serie,c.ano,c.obs,c.marca].join(" ").toLowerCase().includes(q));
   const tenho=cars.filter(c=>c.status==="tenho").length, quero=cars.length-tenho;
   $("sTenho").textContent=$("nTenho").textContent=tenho;
   $("sQuero").textContent=$("nQuero").textContent=quero;
-  const vp=tab==="prio";document.body.classList.toggle("vprio",vp);$("prio").classList.toggle("on",vp);
-  if(vp){const pl=prioLista().filter(c=>(!ft||c.tipo===ft)&&(!q||[c.nome,c.serie,c.ano,c.obs].join(" ").toLowerCase().includes(q)));
-    if(!pl.length){$("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>${q||ft?"Nada encontrado":"Lista de prioridades vazia"}</b>${q||ft?"Tente outra busca.":"Ainda não escolhi minhas prioridades."}</div>`;return}
-    $("grid").innerHTML=pl.map(c=>cardHTML(c,prioLista().indexOf(c)+1)).join("");return}
-  const list=cars.filter(c=>c.status===tab && (!ft||c.tipo===ft) &&
-      (!q||[c.nome,c.serie,c.ano,c.obs].join(" ").toLowerCase().includes(q)))
-    .sort((a,b)=>{
-      const ord=$("fOrdem").value;
-      if(ord!=="nome"){const pa=valor(a),pb=valor(b);
-        if(pa!==pb){if(pa===null)return 1;if(pb===null)return -1;return ord==="barato"?pa-pb:pb-pa}}
-      return a.nome.localeCompare(b.nome,"pt-BR")});
-  if(!list.length){
-    $("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>${q||ft?"Nada encontrado":tab==="tenho"?"Garagem vazia":"Nenhum na mira"}</b>${q||ft?"Tente outra busca.":""}</div>`;return;
-  }
-  $("grid").innerHTML=list.map(c=>cardHTML(c)).join("");
+  document.body.dataset.tab=tab;
+  const vazio=(t,d)=>`<div class="empty"><b>${t}</b>${d}</div>`;
+  if(tab==="tenho"){
+    const l=ordenar(cars.filter(c=>c.status==="tenho"&&filtra(c)));
+    $("lista").innerHTML=l.length?secao("","",l.map(c=>cardHTML(c)).join("")):vazio(q||ft?"Nada encontrado":"Garagem vazia",q||ft?"Tente outro nome ou tire o filtro.":"");return}
+  const todos=prioLista(), pl=todos.filter(filtra);
+  const resto=ordenar(cars.filter(c=>c.status==="quero"&&!(Number(c.prioridade)>0)&&filtra(c)));
+  if(!pl.length&&!resto.length){$("lista").innerHTML=vazio(q||ft?"Nada encontrado":"Nenhum na mira",q||ft?"Tente outro nome ou tire o filtro.":"");return}
+  $("lista").innerHTML=
+    (pl.length?secao("Os que eu mais quero","Em ordem: o 1º é o que eu mais quero.",pl.map(c=>cardHTML(c,todos.indexOf(c)+1)).join(""),"prio"):"")+
+    (resto.length?secao(pl.length?"Também quero":"","",resto.map(c=>cardHTML(c)).join("")):"");
 }
 // lista de prioridade: só "quero" com número, em ordem (1 = mais quero)
 function prioLista(){return cars.filter(c=>c.status==="quero"&&Number(c.prioridade)>0)
   .sort((a,b)=>a.prioridade-b.prioridade||a.nome.localeCompare(b.nome,"pt-BR"))}
 function renumerar(){prioLista().forEach((c,i)=>c.prioridade=i+1);
   cars.forEach(c=>{if(c.status!=="quero"||!(Number(c.prioridade)>0))delete c.prioridade})}
-function cardHTML(c,rank){return `
-    <div class="card" data-id="${esc(c.id)}">
-      <div class="ph">${rank?`<span class="rank${rank===1?" top":""}">#${rank}</span><span class="mv own"><button data-mv="-1" data-id="${esc(c.id)}" title="Subir">▲</button><button data-mv="1" data-id="${esc(c.id)}" title="Descer">▼</button></span>`:""}${c.foto?`<img src="${esc(c.foto)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'none',textContent:'🏎'}))">`:`<span class="none">🏎</span>`}</div>
+const SETA=d=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+function cardHTML(c,rank){const id=esc(c.id),quero=c.status==="quero";return `
+    <article class="card" data-id="${id}">
+      <div class="ph">${rank?`<span class="rank${rank===1?" r1":""}" aria-label="Prioridade ${rank}">${rank}º</span><span class="mv own"><button data-mv="-1" data-id="${id}" aria-label="Subir ${esc(c.nome)} na prioridade">${SETA("M12 19V5M5 12l7-7 7 7")}</button><button data-mv="1" data-id="${id}" aria-label="Descer ${esc(c.nome)} na prioridade">${SETA("M12 5v14M19 12l-7 7-7-7")}</button></span>`:""}${c.foto?`<img src="${esc(c.foto)}" alt="Cartela do ${esc(c.nome)}" width="800" height="1000" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'none',textContent:'Sem foto'}))">`:`<span class="none">Sem foto</span>`}</div>
       <div class="info">
-        <div class="name">${esc(c.nome)}</div>
-        ${(c.ano||c.serie)?`<div class="meta">${esc([c.ano,c.serie].filter(Boolean).join(" · "))}</div>`:""}
-        ${c.obs?`<div class="meta">${esc(c.obs)}</div>`:""}
+        <h3 class="name">${esc(c.nome)}</h3>
+        ${(c.ano||c.serie)?`<div class="meta">${esc([c.serie,c.ano].filter(Boolean).join(", "))}</div>`:""}
+        ${c.media?`<div class="preco"><b>${esc(c.media)}</b><span>preço médio</span></div>`:""}
+        ${c.obs?`<div class="obs own">${esc(c.obs)}</div>`:""}
         <div class="tags">
           <span class="tag marca ${marcaCls(c.marca)}">${esc(c.marca||"Hot Wheels")}</span>
           ${c.tipo?`<span class="tag ${tagCls(c.tipo)}">${esc(c.tipo)}</span>`:""}
-          ${c.preco?`<span class="tag price own">${esc(c.preco)}</span>`:""}
-          ${c.media?`<span class="tag avg" title="Preço médio pesquisado">≈ ${esc(c.media)}</span>`:""}
+          ${c.preco?`<span class="tag price own">${quero?"Pagar até ":"Paguei "}${esc(c.preco)}</span>`:""}
         </div>
-        ${c.status==="quero"?`<button class="got own" data-got="${esc(c.id)}">Peguei! 🏁</button>`:""}
+        ${quero?`<div class="acoes">
+          <a class="btn" href="${zap(msgSaule(c))}" target="_blank" rel="noopener" aria-label="Pedir ${esc(c.nome)} pro Saule no WhatsApp">Pedir pro Saule</a>
+          <a class="btn ghost" href="${linkML(c)}" target="_blank" rel="noopener" aria-label="Buscar ${esc(c.nome)} no Mercado Livre">Mercado Livre</a>
+          <button class="btn got own" data-got="${id}">Peguei!</button>
+        </div>`:""}
+        <button class="btn ghost own" data-edit="${id}" style="margin-top:8px;min-height:40px;font-size:13px">Editar</button>
       </div>
-    </div>`}
+    </article>`}
 
 /* ---------- modal ---------- */
-function setFoto(src){foto=src||"";$("drop").innerHTML=foto?`<img src="${esc(foto)}" alt="">`:"Clique, arraste ou cole (Ctrl+V) uma foto"}
-function setStatus(s){status=s;[...$("fStatus").children].forEach(b=>b.classList.toggle("on",b.dataset.v===s));
+let antesDoModal=null;
+function setFoto(src){foto=src||"";$("drop").innerHTML=foto?`<img src="${esc(foto)}" alt="Prévia da foto">`:"Clique, arraste ou cole (Ctrl+V) uma foto"}
+function setStatus(s){status=s;[...$("fStatus").children].forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===s));
   $("lPreco").textContent=s==="tenho"?"Preço pago":"Quanto quer pagar";$("wPrio").style.display=s==="quero"?"":"none"}
 function openModal(c){
-  editing=c||null;
+  editing=c||null;antesDoModal=document.activeElement;
   $("mTitle").textContent=c?"Editar carrinho":"Novo carrinho";
   $("fNome").value=c?.nome||"";$("fAno").value=c?.ano||"";$("fSerie").value=c?.serie||"";
   $("fTipoM").value=c?.tipo||"Mainline";$("fMarca").value=c?.marca||"Hot Wheels";$("fPreco").value=c?.preco||"";$("fMedia").value=c?.media||"";$("fObs").value=c?.obs||"";$("fPrio").value=c?.prioridade||"";
   const f=c?.foto||"";setFoto(f);$("fUrl").value=/^https?:/.test(f)?f:"";
   setStatus(c?.status||tab);$("del").style.visibility=c?"visible":"hidden";
-  $("ov").classList.add("on");setTimeout(()=>$("fNome").focus(),50);
+  $("ov").classList.add("on");document.body.style.overflow="hidden";setTimeout(()=>$("fNome").focus(),50);
 }
-const close=()=>$("ov").classList.remove("on");
+const close=()=>{if(!$("ov").classList.contains("on"))return;$("ov").classList.remove("on");document.body.style.overflow="";antesDoModal?.focus?.()};
 
 function resize(file){return new Promise(ok=>{const img=new Image(),u=URL.createObjectURL(file);
   img.onload=()=>{const m=1000,k=Math.min(1,m/Math.max(img.width,img.height)),cv=document.createElement("canvas");
@@ -359,11 +465,11 @@ $("cancel").onclick=close;
 $("ov").onclick=e=>e.target===$("ov")&&close();
 document.addEventListener("keydown",e=>e.key==="Escape"&&close());
 
-async function ocupado(btn,fn){const t=btn.textContent;btn.disabled=true;btn.textContent="Salvando...";
+async function ocupado(btn,fn){const t=btn.textContent;btn.disabled=true;btn.textContent="Salvando…";
   try{await fn()}catch(e){console.error(e)}finally{btn.disabled=false;btn.textContent=t}}
 
 $("save").onclick=()=>ocupado($("save"),async()=>{
-  const nome=$("fNome").value.trim();if(!nome){$("fNome").focus();return}
+  const nome=$("fNome").value.trim();if(!nome){$("fNome").focus();toast("Escreva o nome do carrinho");return}
   const id=editing?.id||(nome.toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+Date.now().toString(36));
   let f=foto;if(f.startsWith("data:"))f=await subirFoto(id,f);
   const c={...(editing||{id,criado:Date.now()}),nome,status,foto:f,ano:$("fAno").value.trim(),serie:$("fSerie").value.trim(),
@@ -374,27 +480,24 @@ $("save").onclick=()=>ocupado($("save"),async()=>{
     const outros=prioLista().filter(x=>x!==c);outros.splice(Math.min(np,outros.length+1)-1,0,c);outros.forEach((x,k)=>x.prioridade=k+1)}
   else delete c.prioridade;
   renumerar();
-  await salvarDados(`${editing?"Editar":"Adicionar"}: ${nome}`);close();render();toast(editing?"Atualizado":"Adicionado!");
+  await salvarDados(`${editing?"Editar":"Adicionar"}: ${nome}`);close();render();toast(editing?"Atualizado":"Adicionado");
 });
 $("del").onclick=()=>{if(!editing||!confirm(`Excluir "${editing.nome}"?`))return;
   ocupado($("del"),async()=>{cars=cars.filter(x=>x.id!==editing.id);await salvarDados(`Excluir: ${editing.nome}`);close();render();toast("Excluído")})};
 
-$("grid").onclick=async e=>{
-  if(!token)return;
+$("lista").onclick=async e=>{
+  if(!token||e.target.closest("a"))return;
   const m=e.target.closest("[data-mv]");
   if(m){e.stopPropagation();const l=prioLista(),k=l.findIndex(x=>x.id===m.dataset.id),j=k+Number(m.dataset.mv);
     if(j<0||j>=l.length)return;[l[k],l[j]]=[l[j],l[k]];l.forEach((x,n)=>x.prioridade=n+1);render();
     try{await salvarDados(`Prioridade: ${l[j].nome} -> #${j+1}`)}catch{}return}
   const g=e.target.closest("[data-got]");
   if(g){e.stopPropagation();const c=cars.find(x=>x.id===g.dataset.got);c.status="tenho";renumerar();render();
-    try{await salvarDados(`Peguei: ${c.nome}`);toast("Pra garagem! 🏁")}catch{}return}
+    try{await salvarDados(`Peguei: ${c.nome}`);toast("Foi pra garagem")}catch{}return}
   const card=e.target.closest(".card");if(card)openModal(cars.find(x=>x.id===card.dataset.id));
 };
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;
-  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));render()});
-$("prio").onclick=()=>{tab=tab==="prio"?"quero":"prio";
-  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.tab===(tab==="prio"?"quero":tab)));render();
-  if(tab==="prio")$("grid").scrollIntoView({behavior:"smooth",block:"start"})};
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected",x===b));render()});
 $("q").oninput=render;$("fTipo").onchange=render;
 try{const o=localStorage.getItem("garagemOrdem");if(o)$("fOrdem").value=o}catch{}
 $("fOrdem").onchange=()=>{try{localStorage.setItem("garagemOrdem",$("fOrdem").value)}catch{}render()};
@@ -403,7 +506,7 @@ $("exp").onclick=()=>{const a=document.createElement("a");
   a.href=URL.createObjectURL(new Blob([JSON.stringify(cars,null,1)],{type:"application/json"}));
   a.download=`garagem-backup-${new Date().toISOString().slice(0,10)}.json`;a.click()};
 
-function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2200)}
+function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2600)}
 
 /* ---------- voltar ao topo ---------- */
 {const b=$("topo"),ver=()=>b.classList.toggle("on",scrollY>innerHeight*.6);
@@ -414,9 +517,7 @@ function toast(t){const el=$("toast");el.textContent=t;el.classList.add("on");cl
 for(const m of MARCAS)$("fMarca").add(new Option(m,m));
 for(const t of TIPOS){$("fTipo").add(new Option(t,t));$("fTipoM").add(new Option(t,t))}
 aplicarModo();
-carregar().then(()=>{ // abre na aba que tem carrinhos
-  render()}).catch(e=>{$("grid").innerHTML=`<div class="empty" style="grid-column:1/-1"><b>Não consegui carregar a lista</b>${esc(e.message)}</div>`});
+carregar().then(render).catch(e=>{$("lista").innerHTML=`<div class="empty"><b>Não consegui carregar a lista</b>Verifique a internet e recarregue a página. (${esc(e.message)})</div>`});
 </script>
-<p style="text-align:center;font-size:11px;color:var(--mut);opacity:.7;padding:28px 16px 36px">Modelo 3D: <a href="https://sketchfab.com/3d-models/2025-bmw-m4-gt3-evo-g82-113f83dd87064697a5ec2511d280b9d5" target="_blank" rel="noopener" style="color:inherit">2025 BMW M4 GT3 EVO G82</a> por Ddiaz Design · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener" style="color:inherit">CC BY-NC-SA 4.0</a> (adaptado: pintura e compressão)</p>
 </body>
 </html>
